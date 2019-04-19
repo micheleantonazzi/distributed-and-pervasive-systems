@@ -1,4 +1,4 @@
-# Project of Distributed And Pervasive Systems
+# Project of Distributed And Pervasive Systems ![](https://travis-ci.org/micheleantonazzi/distributed-and-pervasive-systems.svg?branch=develop)
 
 This repo contains the code of the project of Distributed and Pervasive Systems.
 
