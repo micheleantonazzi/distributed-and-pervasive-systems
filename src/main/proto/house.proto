@@ -1,0 +1,6 @@
+syntax = "proto3";
+package messages.house;
+
+message House{
+    string id = 1;
+}
