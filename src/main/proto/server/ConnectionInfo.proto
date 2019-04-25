@@ -5,3 +5,7 @@ message ConnectionInfo{
     string address = 1;
     uint32 port = 2;
 }
+
+message ListOfConnectionInfo{
+    repeated ConnectionInfo connectionInfo = 1;
+}

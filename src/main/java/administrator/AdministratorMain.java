@@ -21,7 +21,7 @@ public class AdministratorMain {
     //Address of server to receive notification
     private static final String CLIENT_ADDRESS = "localhost";
     private static int CLIENT_PORT = 11121;
-    public static final String CLIENT_URI = "http://" + CLIENT_ADDRESS + ":" + CLIENT_PORT + "/client/";
+    public static String CLIENT_URI = "http://" + CLIENT_ADDRESS + ":" + CLIENT_PORT + "/client/";
 
     public static void main(String[] args) {
         Client client = ClientBuilder.newClient();
@@ -32,31 +32,46 @@ public class AdministratorMain {
         System.out.println(House.parseFrom(house.readEntity(InputStream.class)));*/
 
         //the cycle serves to find a free door if the initial one in occupied
-        try{
-            //try to start the server to receive notification
-            final ResourceConfig resourceConfig = new ResourceConfig().packages("administrator.rest");
-            server = GrizzlyHttpServerFactory.createHttpServer(URI.create(CLIENT_URI), resourceConfig);
+        boolean retry;
+        do{
+            retry = false;
+            try{
+                //try to start the server to receive notification
+                final ResourceConfig resourceConfig = new ResourceConfig().packages("administrator.rest");
+                server = GrizzlyHttpServerFactory.createHttpServer(URI.create(CLIENT_URI), resourceConfig);
 
-            //Registration to the server
-            target.path("administrator/connect").request().post(
-                    Entity.entity(ConnectionInfo.newBuilder()
-                            .setAddress(CLIENT_ADDRESS).setPort(CLIENT_PORT).build().toByteArray(),
-                            MediaType.APPLICATION_OCTET_STREAM));
-            System.in.read();
+                //Registration to the server
+                target.path("administrator/connect").request().post(
+                        Entity.entity(ConnectionInfo.newBuilder()
+                                        .setAddress(CLIENT_ADDRESS).setPort(CLIENT_PORT).build().toByteArray(),
+                                MediaType.APPLICATION_OCTET_STREAM));
 
-        }catch (ProcessingException ex){
-            System.out.println(ex.getClass());
-            Throwable cause = ex.getCause();
-            switch (cause.getClass().getName()){
-                //if the connection doesn't exist maybe the server isn't running
-                case "java.net.ConnectException":
-                    System.out.println("ERROR, the server couldn't be contacted, please check if it running.");
-                    break;
+
+                System.in.read();
+
+            }catch (ProcessingException ex){
+                System.out.println(ex.getCause().getClass());
+                Throwable cause = ex.getCause();
+                switch (cause.getClass().getName()){
+                    //if the connection doesn't exist maybe the server isn't running
+                    case "java.net.ConnectException":
+                        System.out.println("ERROR, the server couldn't be contacted, please check if it running.");
+                        break;
+
+                    //when starting multiple clients the port must change
+                    case "java.net.BindException":
+                        System.out.println(CLIENT_URI + " already used, retry changing port.");
+                        CLIENT_PORT++;
+                        CLIENT_URI = "http://" + CLIENT_ADDRESS + ":" + CLIENT_PORT + "/client/";
+                        retry = true;
+                        break;
+                }
             }
-        }
-        catch (IOException ex){
-            System.out.println("Input error");
-        }
+            catch (IOException ex){
+                System.out.println("Input error");
+            }
+        }while (retry);
+
 
         //CLOSE
         client.close();
