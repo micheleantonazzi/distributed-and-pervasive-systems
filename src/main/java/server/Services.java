@@ -5,7 +5,7 @@ import javax.ws.rs.core.Response;
 import messages.house.HouseOuterClass.*;
 
 @Path("/helloworld")
-public class ServerServices {
+public class Services {
 
     @GET
     @Produces("text/plain")
