@@ -10,12 +10,21 @@ public class ArrayListSynchronized<T> {
         this.arrayList = new ArrayList<>();
     }
 
-    public synchronized void add(T element){
-        this.arrayList.add(element);
+    public synchronized boolean add(T element){
+        return this.arrayList.add(element);
     }
 
     public synchronized boolean remove(T element){
         return this.arrayList.remove(element);
+    }
+
+    @Override
+    public ArrayListSynchronized<T> clone(){
+        ArrayListSynchronized<T> ret;
+        synchronized (this){
+            ret = (ArrayListSynchronized<T>) this.arrayList.clone();
+        }
+        return ret;
     }
 
 }
