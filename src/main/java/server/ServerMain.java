@@ -15,7 +15,10 @@ import java.net.URI;
 public class ServerMain {
 
     //STATIC VARIABLES
-    private static final String BASE_URI = "http://localhost:11111/sdp-server/";
+    //address of main server
+    public static final String SERVER_ADDRESS = "localhost";
+    public static final int SERVER_PORT = 11111;
+    public static final String SERVER_URI = "http://" + SERVER_ADDRESS + ":" + SERVER_PORT + "/server/";
 
     private static ServerMain instance = null;
 
@@ -32,13 +35,11 @@ public class ServerMain {
     }
 
     public static void main(String[] args) {
-        final ResourceConfig resourceConfig = new ResourceConfig().packages("server");
-        final HttpServer server = GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), resourceConfig);
-
-        System.out.println(String.format("Server running at " + BASE_URI + "\nType to close..."));
+        final ResourceConfig resourceConfig = new ResourceConfig().packages("server.rest");
+        final HttpServer server = GrizzlyHttpServerFactory.createHttpServer(URI.create(SERVER_URI), resourceConfig);
+        System.out.println(String.format("Server running at " + SERVER_URI + "\nType to close..."));
         try{
             System.in.read();
-
         }
         catch (IOException ex){
             System.out.println(ex);

@@ -1,6 +1,11 @@
 package administrator;
 
 import messages.server.ConnectionInfoOuterClass.*;
+import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
+import org.glassfish.jersey.server.ResourceConfig;
+import server.ServerMain;
+
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -8,26 +13,54 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
+import java.net.URI;
 
 
 public class AdministratorMain {
-    public static final String serverAddress = "localhost";
-    public static final  int serverPort = 11111;
-    public static void main(String[] args) throws IOException {
+
+    //Address of server to receive notification
+    private static final String CLIENT_ADDRESS = "localhost";
+    private static int CLIENT_PORT = 11121;
+    public static final String CLIENT_URI = "http://" + CLIENT_ADDRESS + ":" + CLIENT_PORT + "/client/";
+
+    public static void main(String[] args) {
         Client client = ClientBuilder.newClient();
-        WebTarget target = client.target("http://"+ serverAddress + ":" + serverPort + "/sdp-server/");
+        WebTarget target = client.target(ServerMain.SERVER_URI);
+        HttpServer server = null;
 
         /*Response house = target.path("helloworld/hello").request().get();
         System.out.println(House.parseFrom(house.readEntity(InputStream.class)));*/
 
+        //the cycle serves to find a free door if the initial one in occupied
         try{
-            //Registration to server
+            //try to start the server to receive notification
+            final ResourceConfig resourceConfig = new ResourceConfig().packages("administrator.rest");
+            server = GrizzlyHttpServerFactory.createHttpServer(URI.create(CLIENT_URI), resourceConfig);
+
+            //Registration to the server
             target.path("administrator/connect").request().post(
                     Entity.entity(ConnectionInfo.newBuilder()
-                            .setAddress(serverAddress).setPort(serverPort).build().toByteArray(), MediaType.APPLICATION_OCTET_STREAM));
+                            .setAddress(CLIENT_ADDRESS).setPort(CLIENT_PORT).build().toByteArray(),
+                            MediaType.APPLICATION_OCTET_STREAM));
+            System.in.read();
+
         }catch (ProcessingException ex){
-            System.out.println("ERROR, the server couldn't be contacted.\n" + ex.getMessage());
+            System.out.println(ex.getClass());
+            Throwable cause = ex.getCause();
+            switch (cause.getClass().getName()){
+                //if the connection doesn't exist maybe the server isn't running
+                case "java.net.ConnectException":
+                    System.out.println("ERROR, the server couldn't be contacted, please check if it running.");
+                    break;
+            }
+        }
+        catch (IOException ex){
+            System.out.println("Input error");
         }
 
+        //CLOSE
+        client.close();
+        if(server != null)
+            server.shutdownNow();
     }
 }

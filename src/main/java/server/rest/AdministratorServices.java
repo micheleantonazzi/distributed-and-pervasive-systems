@@ -5,6 +5,7 @@ import javax.ws.rs.core.Response;
 
 import messages.house.HouseOuterClass.*;
 import messages.server.ConnectionInfoOuterClass.*;
+import server.ServerMain;
 
 
 import java.io.IOException;
@@ -19,7 +20,7 @@ public class AdministratorServices {
     @Path("connect")
     public void connect(InputStream stream){
         try{
-            System.out.println(ConnectionInfo.parseFrom(stream));
+            ServerMain.getInstance().addAdministratorClient(ConnectionInfo.parseFrom(stream));
         }catch (IOException ex){
             System.out.println(ex.getMessage());
         }
