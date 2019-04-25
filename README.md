@@ -8,11 +8,21 @@ This repo contains the code of the project of Distributed and Pervasive Systems.
 * Protocol Buffer
 * gRPC
 
-## Build
-This program is independent of the operating system. To run it you have to:
+## Build and run
+This program is independent of the operating system. To build it you have to:
 * install java8 and configure the environment variable `JAVA_HOME`
 * install Maven
 * clone this repository, open a terminal and digit `mvn package`
+
+To run the main classes you have to open different terminal and  digit 
+
+```
+mvn package exec:java -Dexec.mainClass=server.ServerMain
+mvn package exec:java -Dexec.mainClass=administrator.AdministratorMain
+mvn package exec:java -Dexec.mainClass=house.HouseMain
+mvn package exec:java -Dexec.mainClass=house.HouseMain
+...
+```
 
 ## System architecture 
 
