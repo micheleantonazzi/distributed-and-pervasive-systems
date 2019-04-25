@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @Path("administrator")
-public class Services {
+public class AdministratorServices {
 
     //To register the administrator client and send notification to them
     @POST
