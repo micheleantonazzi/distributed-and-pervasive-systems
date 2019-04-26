@@ -4,11 +4,11 @@ import java.io.InputStream;
 
 public aspect NotificationAspect {
 
-    pointcut sendNotification(InputStream inputStream):
-            execution(@server.Notification * *..*.*(..)) && !within(NotificationAspect) && args(inputStream);
+    pointcut sendNotification(InputStream inputStream, server.Notification notification):
+            execution(* *..*.*(..)) && !within(NotificationAspect) && args(inputStream)
+            && @annotation(notification);
 
-    after(InputStream inputStream): sendNotification(inputStream){
-        System.out.println("aspect");
-        System.out.println(thisJoinPoint);
+    after(InputStream inputStream, server.Notification notification): sendNotification(inputStream, notification){
+        System.out.println(notification.text());
     }
 }

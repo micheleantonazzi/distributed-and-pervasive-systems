@@ -14,7 +14,7 @@ public class HouseServices {
     @POST
     @Path("enter")
     @Consumes(MediaType.APPLICATION_OCTET_STREAM)
-    @Notification(text = "New house enter in the network")
+    @Notification(text = "New house enter in the network.")
     public void enter(InputStream inputStream){
         System.out.println("Una casa entra");
     }
