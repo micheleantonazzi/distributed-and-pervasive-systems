@@ -16,7 +16,7 @@ public class Services {
     @Consumes(MediaType.APPLICATION_OCTET_STREAM)
     public void notification(InputStream stream){
         try{
-            System.out.println(NotificationMsg.parseFrom(stream));
+            System.out.println(NotificationMsg.parseFrom(stream).getText());
         }
         catch (IOException ex){
             System.out.println(ex);

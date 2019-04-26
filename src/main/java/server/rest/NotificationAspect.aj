@@ -1,6 +1,11 @@
 package server.rest;
 
+import messages.server.ConnectionInfoMsgOuterClass.*;
+import server.ServerMain;
+import server.threads.RunnableNotification;
+
 import java.io.InputStream;
+import java.util.List;
 
 public aspect NotificationAspect {
 
@@ -10,5 +15,11 @@ public aspect NotificationAspect {
 
     after(InputStream inputStream, server.Notification notification): sendNotification(inputStream, notification){
         System.out.println(notification.text());
+        List<ConnectionInfoMsg> administrators = ServerMain.getInstance().getAdministrators();
+
+        for(ConnectionInfoMsg connectionInfoMsg : administrators){
+            new Thread(new RunnableNotification(connectionInfoMsg, notification.text())).start();
+        }
+
     }
 }
