@@ -58,4 +58,8 @@ public class ServerMain {
     public boolean addAdministrator(ConnectionInfoMsg element){
         return this.administrators.add(element);
     }
+
+    public boolean removeAdministrator(ConnectionInfoMsg element){
+        return this.administrators.remove(element);
+    }
 }

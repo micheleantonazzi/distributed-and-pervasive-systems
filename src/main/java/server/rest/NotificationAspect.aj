@@ -14,9 +14,7 @@ public aspect NotificationAspect {
             && @annotation(notification);
 
     after(InputStream inputStream, server.Notification notification): sendNotification(inputStream, notification){
-        System.out.println(notification.text());
         List<ConnectionInfoMsg> administrators = ServerMain.getInstance().getAdministrators();
-
         for(ConnectionInfoMsg connectionInfoMsg : administrators){
             new Thread(new RunnableNotification(connectionInfoMsg, notification.text())).start();
         }
