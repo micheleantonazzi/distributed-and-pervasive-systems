@@ -7,6 +7,7 @@ This repo contains the code of the project of Distributed and Pervasive Systems.
 * Jersey 2.0
 * Protocol Buffer
 * gRPC
+* AspectJ
 
 ## Build and run
 This program is independent of the operating system. To build it you have to:
