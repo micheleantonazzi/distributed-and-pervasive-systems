@@ -3,7 +3,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import messages.house.HouseOuterClass.*;
-import messages.server.ConnectionInfoOuterClass.*;
+
+import messages.server.ConnectionInfoMsgOuterClass.*;
 import server.ServerMain;
 
 
@@ -19,7 +20,7 @@ public class AdministratorServices {
     @Path("connect")
     public void connect(InputStream stream){
         try{
-            ServerMain.getInstance().addAdministratorClient(ConnectionInfo.parseFrom(stream));
+            ServerMain.getInstance().addAdministrator(ConnectionInfoMsg.parseFrom(stream));
         }catch (IOException ex){
             System.out.println(ex.getMessage());
         }

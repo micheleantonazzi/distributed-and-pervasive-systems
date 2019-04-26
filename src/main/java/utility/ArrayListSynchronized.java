@@ -1,6 +1,7 @@
 package utility;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ArrayListSynchronized<T> {
 
@@ -16,6 +17,10 @@ public class ArrayListSynchronized<T> {
 
     public synchronized boolean remove(T element){
         return this.arrayList.remove(element);
+    }
+
+    public synchronized List<T> getList(){
+        return (List<T>) this.arrayList.clone();
     }
 
     @Override

@@ -2,7 +2,7 @@ package server;
 
 
 
-import messages.server.ConnectionInfoOuterClass.*;
+import messages.server.ConnectionInfoMsgOuterClass.*;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -10,6 +10,7 @@ import utility.ArrayListSynchronized;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 
 //Singleton
 public class ServerMain {
@@ -23,7 +24,7 @@ public class ServerMain {
     private static ServerMain instance = null;
 
     //INSTANCE VARIABLES
-    private ArrayListSynchronized<ConnectionInfo> administratorClientConnected = new ArrayListSynchronized<>();
+    private ArrayListSynchronized<ConnectionInfoMsg> administrators = new ArrayListSynchronized<>();
 
     //Private constructor
     private ServerMain(){}
@@ -50,11 +51,11 @@ public class ServerMain {
         }
     }
 
-    public ArrayListSynchronized<ConnectionInfo> getAdministratorClientConnected(){
-        return this.administratorClientConnected.clone();
+    public List<ConnectionInfoMsg> getAdministrators(){
+        return this.administrators.getList();
     }
 
-    public boolean addAdministratorClient(ConnectionInfo element){
-        return this.administratorClientConnected.add(element);
+    public boolean addAdministrator(ConnectionInfoMsg element){
+        return this.administrators.add(element);
     }
 }
