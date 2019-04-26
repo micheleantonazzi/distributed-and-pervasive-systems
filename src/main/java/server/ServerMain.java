@@ -37,7 +37,7 @@ public class ServerMain {
     public static void main(String[] args) {
         final ResourceConfig resourceConfig = new ResourceConfig().packages("server.rest");
         final HttpServer server = GrizzlyHttpServerFactory.createHttpServer(URI.create(SERVER_URI), resourceConfig);
-        System.out.println(String.format("Server running at " + SERVER_URI + "\nType to close..."));
+        System.out.println(String.format("Server running at " + SERVER_URI + "\n"));
         try{
             System.in.read();
         }

@@ -2,7 +2,6 @@ package server.rest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import messages.house.HouseOuterClass.*;
 import messages.server.ConnectionInfoOuterClass.*;
 import server.ServerMain;

@@ -21,7 +21,7 @@ public class AdministratorMain {
     //Address of server to receive notification
     private static final String CLIENT_ADDRESS = "localhost";
     private static int CLIENT_PORT = 11121;
-    public static String CLIENT_URI = "http://" + CLIENT_ADDRESS + ":" + CLIENT_PORT + "/client/";
+    public static String CLIENT_URI = "http://" + CLIENT_ADDRESS + ":" + CLIENT_PORT + "/administrator/";
 
     public static void main(String[] args) {
         Client client = ClientBuilder.newClient();
@@ -45,6 +45,7 @@ public class AdministratorMain {
                         Entity.entity(ConnectionInfo.newBuilder()
                                         .setAddress(CLIENT_ADDRESS).setPort(CLIENT_PORT).build().toByteArray(),
                                 MediaType.APPLICATION_OCTET_STREAM));
+                System.out.println(String.format("Client running at " + CLIENT_URI + "\n"));
 
 
                 System.in.read();
@@ -62,7 +63,7 @@ public class AdministratorMain {
                     case "java.net.BindException":
                         System.out.println(CLIENT_URI + " already used, retry changing port.");
                         CLIENT_PORT++;
-                        CLIENT_URI = "http://" + CLIENT_ADDRESS + ":" + CLIENT_PORT + "/client/";
+                        CLIENT_URI = "http://" + CLIENT_ADDRESS + ":" + CLIENT_PORT + "/administrator/";
                         retry = true;
                         break;
                 }
