@@ -1,6 +1,6 @@
 package administrator.rest;
 
-import messages.administrator.NotificationOuterClass.*;
+import messages.administrator.NotificationMsgOuterClass.*;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -16,7 +16,7 @@ public class Services {
     @Consumes(MediaType.APPLICATION_OCTET_STREAM)
     public void notification(InputStream stream){
         try{
-            System.out.println(Notification.parseFrom(stream));
+            System.out.println(NotificationMsg.parseFrom(stream));
         }
         catch (IOException ex){
             System.out.println(ex);
