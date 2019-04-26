@@ -1,6 +1,6 @@
 package administrator;
 
-import messages.server.ConnectionInfoOuterClass.*;
+import messages.server.ConnectionInfoMsgOuterClass.*;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -42,7 +42,7 @@ public class AdministratorMain {
 
                 //Registration to the server
                 target.path("administrator/connect").request().post(
-                        Entity.entity(ConnectionInfo.newBuilder()
+                        Entity.entity(ConnectionInfoMsg.newBuilder()
                                         .setAddress(CLIENT_ADDRESS).setPort(CLIENT_PORT).build().toByteArray(),
                                 MediaType.APPLICATION_OCTET_STREAM));
                 System.out.println(String.format("Client running at " + CLIENT_URI + "\n"));
