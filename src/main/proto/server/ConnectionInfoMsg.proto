@@ -1,0 +1,11 @@
+syntax = "proto3";
+package messages.server;
+
+message ConnectionInfoMsg{
+    string address = 1;
+    uint32 port = 2;
+}
+
+message ListOfConnectionInfoMsg{
+    repeated ConnectionInfoMsg connectionInfoMsg = 1;
+}

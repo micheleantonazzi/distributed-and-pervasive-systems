@@ -2,11 +2,28 @@
 
 This repo contains the code of the project of Distributed and Pervasive Systems.
 
-## Build
-This program is independent of the operating system. To run it you have to:
+## Technologies used
+
+* Jersey 2.0
+* Protocol Buffer
+* gRPC
+* AspectJ
+
+## Build and run
+This program is independent of the operating system. To build it you have to:
 * install java8 and configure the environment variable `JAVA_HOME`
 * install Maven
 * clone this repository, open a terminal and digit `mvn package`
+
+To run the main classes you have to open different terminal and  digit 
+
+```
+mvn package exec:java -Dexec.mainClass=server.ServerMain
+mvn package exec:java -Dexec.mainClass=administrator.AdministratorMain
+mvn package exec:java -Dexec.mainClass=house.HouseMain
+mvn package exec:java -Dexec.mainClass=house.HouseMain
+...
+```
 
 ## System architecture 
 
@@ -22,7 +39,7 @@ The central server is a node that expose a REST API called by houses and adminis
 * to store statistics and data about the electricity consume of the houses. These statistics must contains the amount of kW and the current timestamp;
 * to expose this data to allow administrators to consult them.
 
-In particular, the services that the server exposes to administrators are:
+In particular, the server exposes to administrators a lot of services. They are:
 
 * list of houses;
 * last *n* statistics of a specific house;
@@ -38,4 +55,4 @@ An administrator is a simple client that communicates with the server.
 
 ## House
 
-A house
+A house is a node of the condominium. It forms a dynamic peer to peer network with other houses. To enter in the network a house has to contact the main server to confirm her ID and to receive the list of other houses, in way to present to them. Moreover to leave the network a house has to alert the server and the other houses but, in case of fault, the network must be safe and react correctly to this event. Each house in the network must inform all other houses of its electricity consume and calculate the statistics of the entire condominium. In addition a house can require more power (3 kW) over a period of time. The total extra power available to the condominium is 6 kW and the houses must coordinate to  respect this limit.
