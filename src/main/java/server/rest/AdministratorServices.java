@@ -2,6 +2,8 @@ package server.rest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import aspects.annotations.ProtoInput;
 import messages.house.HouseOuterClass.*;
 
 import messages.server.ConnectionInfoMsgOuterClass.*;
@@ -18,21 +20,15 @@ public class AdministratorServices {
     @POST
     @Consumes(MediaType.APPLICATION_OCTET_STREAM)
     @Path("connect")
-    public void connect(InputStream stream){
+    @ProtoInput(proto = ConnectionInfoMsg.class)
+    public Response connect(InputStream stream){
         try{
             ServerMain.getInstance().addAdministrator(ConnectionInfoMsg.parseFrom(stream));
         }catch (IOException ex){
             System.out.println(ex.getMessage());
+            return Response.status(500).build();
         }
-    }
-
-
-    @GET
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    @Path("hello")
-    public Response hello(){
-        House house = House.newBuilder().setId("2").build();
-        return Response.ok(house.toByteArray()).build();
+        return Response.ok().build();
     }
 }
 

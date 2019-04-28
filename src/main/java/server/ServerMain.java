@@ -25,6 +25,7 @@ public class ServerMain {
 
     //INSTANCE VARIABLES
     private ArrayListSynchronized<ConnectionInfoMsg> administrators = new ArrayListSynchronized<>();
+    private ArrayListSynchronized<ConnectionInfoMsg> houses = new ArrayListSynchronized<>();
 
     //Private constructor
     private ServerMain(){}
@@ -55,11 +56,16 @@ public class ServerMain {
         return this.administrators.getList();
     }
 
+    //Administrator
     public boolean addAdministrator(ConnectionInfoMsg element){
         return this.administrators.add(element);
     }
 
     public boolean removeAdministrator(ConnectionInfoMsg element){
         return this.administrators.remove(element);
+    }
+
+    public boolean addHouse(ConnectionInfoMsg element) {
+        return this.houses.add(element);
     }
 }

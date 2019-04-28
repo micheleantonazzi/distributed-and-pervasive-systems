@@ -16,7 +16,7 @@ public class HouseMain {
         WebTarget target = client.target(ServerMain.SERVER_URI);
         try{
             target.path("house/enter").request().post(
-                    Entity.entity(ConnectionInfoMsg.newBuilder().build().toByteArray(),
+                    Entity.entity(ConnectionInfoMsg.newBuilder().setAddress("localhost").setPort(11134).build().toByteArray(),
                             MediaType.APPLICATION_OCTET_STREAM));
         }
         catch (ProcessingException ex){

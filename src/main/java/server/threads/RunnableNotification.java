@@ -2,7 +2,6 @@ package server.threads;
 
 import messages.administrator.NotificationMsgOuterClass.*;
 import messages.server.ConnectionInfoMsgOuterClass.*;
-import server.Notification;
 import server.ServerMain;
 
 import javax.ws.rs.ProcessingException;
