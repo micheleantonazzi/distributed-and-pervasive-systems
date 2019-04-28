@@ -1,7 +1,7 @@
 package server.threads;
 
-import messages.administrator.NotificationMsgOuterClass.*;
-import messages.server.ConnectionInfoMsgOuterClass.*;
+import messages.NotificationMsgOuterClass.NotificationMsg;
+import messages.AdministratorInfoMsgOuterClass.AdministratorInfoMsg;
 import server.ServerMain;
 
 import javax.ws.rs.ProcessingException;
@@ -12,10 +12,10 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 public class RunnableNotification implements Runnable {
-    private ConnectionInfoMsg connectionInfo;
+    private AdministratorInfoMsg connectionInfo;
     String text;
 
-    public RunnableNotification(ConnectionInfoMsg connectionInfo, String text){
+    public RunnableNotification(AdministratorInfoMsg connectionInfo, String text){
         this.connectionInfo = connectionInfo;
         this.text = text;
     }

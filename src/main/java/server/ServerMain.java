@@ -2,7 +2,7 @@ package server;
 
 
 
-import messages.server.ConnectionInfoMsgOuterClass.*;
+import messages.AdministratorInfoMsgOuterClass.AdministratorInfoMsg;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -24,8 +24,8 @@ public class ServerMain {
     private static ServerMain instance = null;
 
     //INSTANCE VARIABLES
-    private ArrayListSynchronized<ConnectionInfoMsg> administrators = new ArrayListSynchronized<>();
-    private ArrayListSynchronized<ConnectionInfoMsg> houses = new ArrayListSynchronized<>();
+    private ArrayListSynchronized<AdministratorInfoMsg> administrators = new ArrayListSynchronized<>();
+    private ArrayListSynchronized<AdministratorInfoMsg> houses = new ArrayListSynchronized<>();
 
     //Private constructor
     private ServerMain(){}
@@ -52,20 +52,20 @@ public class ServerMain {
         }
     }
 
-    public List<ConnectionInfoMsg> getAdministrators(){
+    public List<AdministratorInfoMsg> getAdministrators(){
         return this.administrators.getList();
     }
 
     //Administrator
-    public boolean addAdministrator(ConnectionInfoMsg element){
+    public boolean addAdministrator(AdministratorInfoMsg element){
         return this.administrators.add(element);
     }
 
-    public boolean removeAdministrator(ConnectionInfoMsg element){
+    public boolean removeAdministrator(AdministratorInfoMsg element){
         return this.administrators.remove(element);
     }
 
-    public boolean addHouse(ConnectionInfoMsg element) {
+    public boolean addHouse(AdministratorInfoMsg element) {
         return this.houses.add(element);
     }
 }

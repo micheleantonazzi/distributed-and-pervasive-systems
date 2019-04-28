@@ -4,9 +4,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import aspects.annotations.ProtoInput;
-import messages.house.HouseOuterClass.*;
-
-import messages.server.ConnectionInfoMsgOuterClass.*;
+import messages.AdministratorInfoMsgOuterClass.AdministratorInfoMsg;
+import messages.HouseInfoMsgOuterClass.HouseInfoMsg;
 import server.ServerMain;
 
 
@@ -20,14 +19,22 @@ public class AdministratorServices {
     @POST
     @Consumes(MediaType.APPLICATION_OCTET_STREAM)
     @Path("connect")
-    @ProtoInput(proto = ConnectionInfoMsg.class)
+    @ProtoInput(proto = AdministratorInfoMsg.class)
     public Response connect(InputStream stream){
         try{
-            ServerMain.getInstance().addAdministrator(ConnectionInfoMsg.parseFrom(stream));
+            ServerMain.getInstance().addAdministrator(AdministratorInfoMsg.parseFrom(stream));
         }catch (IOException ex){
             System.out.println(ex.getMessage());
             return Response.status(500).build();
         }
+        return Response.ok().build();
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
+    @Path("houses")
+    @ProtoInput(proto = HouseInfoMsg.class)
+    public Response houses(InputStream inputStream){
         return Response.ok().build();
     }
 }

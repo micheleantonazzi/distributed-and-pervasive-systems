@@ -1,7 +1,8 @@
 package administrator.rest;
 
 import aspects.annotations.ProtoInput;
-import messages.administrator.NotificationMsgOuterClass.*;
+import messages.NotificationMsgOuterClass.NotificationMsg;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;

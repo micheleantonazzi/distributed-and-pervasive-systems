@@ -1,5 +1,5 @@
 syntax = "proto3";
-package messages.administrator;
+package messages;
 
 message NotificationMsg{
     string text = 1;

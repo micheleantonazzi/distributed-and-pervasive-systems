@@ -1,6 +1,6 @@
 package house;
 
-import messages.server.ConnectionInfoMsgOuterClass.*;
+import messages.AdministratorInfoMsgOuterClass.AdministratorInfoMsg;
 import server.ServerMain;
 
 import javax.ws.rs.ProcessingException;
@@ -16,7 +16,7 @@ public class HouseMain {
         WebTarget target = client.target(ServerMain.SERVER_URI);
         try{
             target.path("house/enter").request().post(
-                    Entity.entity(ConnectionInfoMsg.newBuilder().setAddress("localhost").setPort(11134).build().toByteArray(),
+                    Entity.entity(AdministratorInfoMsg.newBuilder().setAddress("localhost").setPort(11134).build().toByteArray(),
                             MediaType.APPLICATION_OCTET_STREAM));
         }
         catch (ProcessingException ex){

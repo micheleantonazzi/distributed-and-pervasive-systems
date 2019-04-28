@@ -1,6 +1,6 @@
 package administrator;
 
-import messages.server.ConnectionInfoMsgOuterClass.*;
+import messages.AdministratorInfoMsgOuterClass.AdministratorInfoMsg;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -12,6 +12,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.net.URI;
 
@@ -41,15 +42,29 @@ public class AdministratorMain {
                 server = GrizzlyHttpServerFactory.createHttpServer(URI.create(CLIENT_URI), resourceConfig);
 
                 //Registration to the server
-                target.path("administrator/connect").request().post(
-                        Entity.entity(ConnectionInfoMsg.newBuilder()
+                Response response = target.path("administrator/connect").request().post(
+                        Entity.entity(AdministratorInfoMsg.newBuilder()
                                         .setAddress(CLIENT_ADDRESS).setPort(CLIENT_PORT).build().toByteArray(),
                                 MediaType.APPLICATION_OCTET_STREAM));
+
+                if(response.getStatus() != 200){
+                    throw  new Exception("Connection to server failed, response status: " + response.getStatus());
+                }
+
                 System.out.println(String.format("Client running at " + CLIENT_URI + "\n"));
 
+                char input = ' ';
+                while(input != 'x'){
+                    System.out.println("Type:\n" +
+                            "\t- 0 to get houses list\n" +
+                            "\t- x to close the application");
+                    input = (char) System.in.read();
+                    switch (input){
+                        case '0':
 
-                System.in.read();
-
+                            break;
+                    }
+                }
             }catch (ProcessingException ex){
                 System.out.println(ex.getCause().getClass());
                 Throwable cause = ex.getCause();
@@ -70,6 +85,9 @@ public class AdministratorMain {
             }
             catch (IOException ex){
                 System.out.println("User's input error");
+            }
+            catch (Exception ex){
+                System.out.println(ex.getMessage());
             }
         }while (retry);
 

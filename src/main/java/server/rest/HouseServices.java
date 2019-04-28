@@ -1,10 +1,7 @@
 package server.rest;
 
 import aspects.annotations.ProtoInput;
-import com.google.protobuf.GeneratedMessageV3;
-import com.google.protobuf.Message;
-import messages.server.ConnectionInfoMsgOuterClass;
-import messages.server.ConnectionInfoMsgOuterClass.*;
+import messages.AdministratorInfoMsgOuterClass.AdministratorInfoMsg;
 import aspects.annotations.Notification;
 import server.ServerMain;
 
@@ -22,12 +19,12 @@ public class HouseServices {
     @POST
     @Path("enter")
     @Consumes(MediaType.APPLICATION_OCTET_STREAM)
-    @ProtoInput(proto = ConnectionInfoMsg.class)
+    @ProtoInput(proto = AdministratorInfoMsg.class)
     @Notification(text = "New house enter in the network.")
     public Response enter(InputStream inputStream){
-        ConnectionInfoMsg msg = null;
+        AdministratorInfoMsg msg = null;
         try {
-            msg = ConnectionInfoMsg.parseFrom(inputStream);
+            msg = AdministratorInfoMsg.parseFrom(inputStream);
         } catch (IOException ex) {
             System.out.println(ex);
             return Response.status(500).build();

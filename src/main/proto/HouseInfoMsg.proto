@@ -1,6 +1,6 @@
 syntax = "proto3";
-package messages.house;
+package messages;
 
-message House{
+message HouseInfoMsg{
     string id = 1;
 }
