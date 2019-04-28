@@ -7,7 +7,7 @@ import server.threads.RunnableNotification;
 
 import javax.ws.rs.core.Response;
 import java.io.InputStream;
-import java.util.List;
+import java.util.Set;
 
 
 //This aspect sends automatically notifications
@@ -20,7 +20,7 @@ public aspect NotificationAspect {
     after(InputStream inputStream, Notification notification) returning(Object ret): sendNotification(inputStream, notification){
         Response response = (Response) ret;
         if (response.getStatus() == 200){
-            List<AdministratorInfoMsg> administrators = ServerMain.getInstance().getAdministrators();
+            Set<AdministratorInfoMsg> administrators = ServerMain.getInstance().getAdministrators();
             for(AdministratorInfoMsg connectionInfoMsg : administrators)
                 new Thread(new RunnableNotification(connectionInfoMsg, notification.text())).start();
         }

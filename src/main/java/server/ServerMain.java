@@ -8,10 +8,12 @@ import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import utility.ArrayListSynchronized;
+import utility.HashSetSynchronized;
 
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
+import java.util.Set;
 
 //Singleton
 public class ServerMain {
@@ -25,8 +27,8 @@ public class ServerMain {
     private static ServerMain instance = null;
 
     //INSTANCE VARIABLES
-    private ArrayListSynchronized<AdministratorInfoMsg> administrators = new ArrayListSynchronized<>();
-    private ArrayListSynchronized<HouseInfoMsg> houses = new ArrayListSynchronized<>();
+    private HashSetSynchronized<AdministratorInfoMsg> administrators = new HashSetSynchronized<>();
+    private HashSetSynchronized<HouseInfoMsg> houses = new HashSetSynchronized<>();
 
     //Private constructor
     private ServerMain(){}
@@ -53,7 +55,7 @@ public class ServerMain {
         }
     }
 
-    public List<AdministratorInfoMsg> getAdministrators(){
+    public Set<AdministratorInfoMsg> getAdministrators(){
         return this.administrators.getList();
     }
 
@@ -70,7 +72,7 @@ public class ServerMain {
         return this.houses.add(element);
     }
 
-    public List<HouseInfoMsg> getHouses(){
+    public Set<HouseInfoMsg> getHouses(){
         return this.houses.getList();
     }
 }
