@@ -2,9 +2,10 @@ package server.rest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import messages.house.HouseOuterClass.*;
 
-import messages.server.ConnectionInfoMsgOuterClass.*;
+import aspects.annotations.ProtoInput;
+import messages.AdministratorInfoMsgOuterClass.AdministratorInfoMsg;
+import messages.HouseInfoMsgOuterClass.HouseInfoListMsg;
 import server.ServerMain;
 
 
@@ -18,21 +19,39 @@ public class AdministratorServices {
     @POST
     @Consumes(MediaType.APPLICATION_OCTET_STREAM)
     @Path("connect")
-    public void connect(InputStream stream){
+    @ProtoInput(proto = AdministratorInfoMsg.class)
+    public Response connect(InputStream stream){
         try{
-            ServerMain.getInstance().addAdministrator(ConnectionInfoMsg.parseFrom(stream));
+            AdministratorInfoMsg administrator = AdministratorInfoMsg.parseFrom(stream);
+            ServerMain.getInstance().addAdministrator(administrator);
         }catch (IOException ex){
             System.out.println(ex.getMessage());
+            return Response.status(500).build();
         }
+        return Response.ok().build();
     }
 
+    @POST
+    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
+    @Path("disconnect")
+    @ProtoInput(proto = AdministratorInfoMsg.class)
+    public Response disconnect(InputStream inputStream){
+        try {
+            AdministratorInfoMsg administratorInfoMsg = AdministratorInfoMsg.parseFrom(inputStream);
+            System.out.println(ServerMain.getInstance().removeAdministrator(administratorInfoMsg));
+        } catch (IOException ex) {
+            System.out.println(ex);
+            return Response.status(500).build();
+        }
+        return Response.ok().build();
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    @Path("hello")
-    public Response hello(){
-        House house = House.newBuilder().setId("2").build();
-        return Response.ok(house.toByteArray()).build();
+    @Path("houses")
+    public Response houses(){
+        HouseInfoListMsg houseList = HouseInfoListMsg.newBuilder().addAllHouse(ServerMain.getInstance().getHouses()).build();
+        return Response.ok(houseList.toByteArray(), MediaType.APPLICATION_OCTET_STREAM).build();
     }
 }
 

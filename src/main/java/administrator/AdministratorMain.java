@@ -1,6 +1,8 @@
 package administrator;
 
-import messages.server.ConnectionInfoMsgOuterClass.*;
+import messages.AdministratorInfoMsgOuterClass.AdministratorInfoMsg;
+import messages.HouseInfoMsgOuterClass.HouseInfoMsg;
+import messages.HouseInfoMsgOuterClass.HouseInfoListMsg;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -12,7 +14,9 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 
 
@@ -20,7 +24,7 @@ public class AdministratorMain {
 
     //Address of server to receive notification
     private static final String CLIENT_ADDRESS = "localhost";
-    private static int CLIENT_PORT = 11121;
+    private static int CLIENT_PORT = 11122;
     public static String CLIENT_URI = "http://" + CLIENT_ADDRESS + ":" + CLIENT_PORT + "/administrator/";
 
     public static void main(String[] args) {
@@ -41,14 +45,43 @@ public class AdministratorMain {
                 server = GrizzlyHttpServerFactory.createHttpServer(URI.create(CLIENT_URI), resourceConfig);
 
                 //Registration to the server
-                target.path("administrator/connect").request().post(
-                        Entity.entity(ConnectionInfoMsg.newBuilder()
+                Response response = target.path("administrator/connect").request().post(
+                        Entity.entity(AdministratorInfoMsg.newBuilder()
                                         .setAddress(CLIENT_ADDRESS).setPort(CLIENT_PORT).build().toByteArray(),
                                 MediaType.APPLICATION_OCTET_STREAM));
+
+                if(response.getStatus() != 200){
+                    throw new Exception("Connection to server failed, response status: " + response.getStatus());
+                }
+
                 System.out.println(String.format("Client running at " + CLIENT_URI + "\n"));
 
+                char input = ' ';
+                while(input != 'x'){
+                    System.out.println("Type:\n" +
+                            "\t- 0 to get houses list\n" +
+                            "\t- x to close the application");
+                    input = (char) System.in.read();
+                    System.in.skip(1);
+                    switch (input){
+                        case '0':
+                            response = target.path("administrator/houses").request().get();
+                            if(response.getStatus() != 200)
+                                System.out.println("Request failed, response status: " + response.getStatus());
+                            else{
+                                HouseInfoListMsg houses = HouseInfoListMsg.parseFrom(response.readEntity(InputStream.class));
+                                for(HouseInfoMsg house : houses.getHouseList())
+                                    System.out.println("- House: id = " + house.getId());
+                            }
+                            break;
+                    }
+                }
 
-                System.in.read();
+                //Disconnect to the server
+                target.path("administrator/disconnect").request().post(
+                        Entity.entity(AdministratorInfoMsg.newBuilder()
+                                        .setAddress(CLIENT_ADDRESS).setPort(CLIENT_PORT).build().toByteArray(),
+                                MediaType.APPLICATION_OCTET_STREAM));
 
             }catch (ProcessingException ex){
                 System.out.println(ex.getCause().getClass());
@@ -69,7 +102,10 @@ public class AdministratorMain {
                 }
             }
             catch (IOException ex){
-                System.out.println("Input error");
+                System.out.println("User's input error");
+            }
+            catch (Exception ex){
+                System.out.println(ex.getMessage());
             }
         }while (retry);
 
