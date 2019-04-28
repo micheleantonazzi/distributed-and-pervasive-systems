@@ -69,7 +69,7 @@ public class AdministratorMain {
                 }
             }
             catch (IOException ex){
-                System.out.println("Input error");
+                System.out.println("User's input error");
             }
         }while (retry);
 
