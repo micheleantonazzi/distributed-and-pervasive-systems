@@ -4,6 +4,8 @@ import aspects.annotations.Notification;
 import messages.server.ConnectionInfoMsgOuterClass.*;
 import server.ServerMain;
 import server.threads.RunnableNotification;
+
+import javax.ws.rs.core.Response;
 import java.io.InputStream;
 import java.util.List;
 
@@ -15,21 +17,12 @@ public aspect NotificationAspect {
             execution(* *..*.*(..)) && !within(aspects.NotificationAspect) && args(inputStream)
             && @annotation(notification);
 
-    /*void around(InputStream inputStream, Notification notification): sendNotification(inputStream, notification){
-        try{
-            proceed(inputStream, notification);
-
-            //if the method is completed correctly, the notification is sent
+    after(InputStream inputStream, Notification notification) returning(Object ret): sendNotification(inputStream, notification){
+        Response response = (Response) ret;
+        if (response.getStatus() == 200){
             List<ConnectionInfoMsg> administrators = ServerMain.getInstance().getAdministrators();
-            for(ConnectionInfoMsg connectionInfoMsg : administrators){
+            for(ConnectionInfoMsg connectionInfoMsg : administrators)
                 new Thread(new RunnableNotification(connectionInfoMsg, notification.text())).start();
-            }
-            System.out.println("house added");
-        }
-        catch (Exception exception){
-            System.out.println("Error parsing stream\n" + exception);
         }
     }
-    */
-
 }

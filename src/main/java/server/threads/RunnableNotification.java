@@ -24,7 +24,6 @@ public class RunnableNotification implements Runnable {
     public void run() {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("http://" + connectionInfo.getAddress() + ":" + connectionInfo.getPort());
-
         //the cycle serves to remove an administrator's client if it disconnected
         int retry = 0;
         do {

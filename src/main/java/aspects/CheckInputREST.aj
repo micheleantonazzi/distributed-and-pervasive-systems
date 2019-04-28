@@ -4,13 +4,12 @@ import aspects.annotations.ProtoInput;
 import com.google.protobuf.GeneratedMessageV3.Builder;
 import com.google.protobuf.Message;
 import com.google.protobuf.Parser;
-import messages.server.ConnectionInfoMsgOuterClass;
 
 import javax.ws.rs.core.Response;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 //This aspect check if the input of the aspect is correct
 public aspect CheckInputREST {
@@ -31,6 +30,11 @@ public aspect CheckInputREST {
             //if the messages are equals the input is wrong
             if (builder.build().equals(message))
                 return Response.status(400).build();
+
+            //reset the input stream
+            inputStream.close();
+            inputStream = new ByteArrayInputStream(((Message) message).toByteArray());
+
         } catch (IllegalAccessException ex) {
             System.out.println(ex);
             return Response.status(500).build();
@@ -45,7 +49,6 @@ public aspect CheckInputREST {
             System.out.println(ex);
             return Response.status(500).build();
         }
-        System.out.println("corretto");
         return proceed(inputStream, protoInput);
     }
 }
