@@ -3,6 +3,7 @@ package server.rest;
 import aspects.annotations.ProtoInput;
 import messages.AdministratorInfoMsgOuterClass.AdministratorInfoMsg;
 import aspects.annotations.Notification;
+import messages.HouseInfoMsgOuterClass.HouseInfoMsg;
 import server.ServerMain;
 
 import javax.ws.rs.Consumes;
@@ -22,9 +23,9 @@ public class HouseServices {
     @ProtoInput(proto = AdministratorInfoMsg.class)
     @Notification(text = "New house enter in the network.")
     public Response enter(InputStream inputStream){
-        AdministratorInfoMsg msg = null;
+        HouseInfoMsg msg = null;
         try {
-            msg = AdministratorInfoMsg.parseFrom(inputStream);
+            msg = HouseInfoMsg.parseFrom(inputStream);
         } catch (IOException ex) {
             System.out.println(ex);
             return Response.status(500).build();

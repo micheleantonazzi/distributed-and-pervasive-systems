@@ -4,3 +4,7 @@ package messages;
 message HouseInfoMsg{
     string id = 1;
 }
+
+message HouseInfoListMsg{
+    repeated HouseInfoMsg house = 1;
+}
