@@ -1,0 +1,7 @@
+syntax = "proto3";
+package house.proto.services;
+
+import public "HouseMsgs.proto";
+
+service HouseServices {
+}
