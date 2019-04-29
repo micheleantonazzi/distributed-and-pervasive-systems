@@ -3,11 +3,10 @@ package server;
 
 
 import messages.AdministratorInfoMsgOuterClass.AdministratorInfoMsg;
-import messages.HouseInfoMsgOuterClass.HouseInfoMsg;
+import messages.HouseMsgs.HouseInfoMsg;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
-import utility.ArrayListSynchronized;
 import utility.HashSetSynchronized;
 
 import java.io.IOException;

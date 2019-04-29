@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @Path("")
-public class Services {
+public class RestServices {
 
     @POST
     @Path("notification")

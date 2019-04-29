@@ -5,7 +5,7 @@ import javax.ws.rs.core.Response;
 
 import aspects.annotations.ProtoInput;
 import messages.AdministratorInfoMsgOuterClass.AdministratorInfoMsg;
-import messages.HouseInfoMsgOuterClass.HouseInfoListMsg;
+import messages.HouseMsgs.HouseInfoListMsg;
 import server.ServerMain;
 
 
@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @Path("administrator")
-public class AdministratorServices {
+public class AdministratorRestServices {
 
     //To register the administrator client and send notification to them
     @POST

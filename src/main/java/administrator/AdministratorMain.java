@@ -1,8 +1,8 @@
 package administrator;
 
 import messages.AdministratorInfoMsgOuterClass.AdministratorInfoMsg;
-import messages.HouseInfoMsgOuterClass.HouseInfoMsg;
-import messages.HouseInfoMsgOuterClass.HouseInfoListMsg;
+import messages.HouseMsgs.HouseInfoMsg;
+import messages.HouseMsgs.HouseInfoListMsg;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -15,8 +15,10 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 
 
@@ -56,24 +58,25 @@ public class AdministratorMain {
 
                 System.out.println(String.format("Client running at " + CLIENT_URI + "\n"));
 
-                char input = ' ';
-                while(input != 'x'){
+                //buffered reader to read from standard input
+                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+                String input = " ";
+                while(!input.equals("x")){
                     System.out.println("Type:\n" +
                             "\t- 0 to get houses list\n" +
                             "\t- x to close the application");
-                    input = (char) System.in.read();
-                    System.in.skip(1);
-                    switch (input){
-                        case '0':
-                            response = target.path("administrator/houses").request().get();
-                            if(response.getStatus() != 200)
-                                System.out.println("Request failed, response status: " + response.getStatus());
-                            else{
-                                HouseInfoListMsg houses = HouseInfoListMsg.parseFrom(response.readEntity(InputStream.class));
-                                for(HouseInfoMsg house : houses.getHouseList())
-                                    System.out.println("- House: id = " + house.getId());
-                            }
-                            break;
+                    input = reader.readLine();
+                    if (input.equals("0")){
+                        response = target.path("administrator/houses").request().get();
+                        System.out.println(response);
+                        if(response.getStatus() != 200)
+                            System.out.println("Request failed, response status: " + response.getStatus());
+                        else{
+                            HouseInfoListMsg houses = HouseInfoListMsg.parseFrom(response.readEntity(InputStream.class));
+                            for(HouseInfoMsg house : houses.getHouseList())
+                                System.out.println("- House: id = " + house.getId());
+                        }
                     }
                 }
 
@@ -84,7 +87,6 @@ public class AdministratorMain {
                                 MediaType.APPLICATION_OCTET_STREAM));
 
             }catch (ProcessingException ex){
-                System.out.println(ex.getCause().getClass());
                 Throwable cause = ex.getCause();
                 switch (cause.getClass().getName()){
                     //if the connection doesn't exist maybe the server isn't running
