@@ -69,7 +69,6 @@ public class AdministratorMain {
                     input = reader.readLine();
                     if (input.equals("0")){
                         response = target.path("administrator/houses").request().get();
-                        System.out.println(response);
                         if(response.getStatus() != 200)
                             System.out.println("Request failed, response status: " + response.getStatus());
                         else{

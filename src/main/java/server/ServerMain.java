@@ -11,7 +11,6 @@ import utility.HashSetSynchronized;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.List;
 import java.util.Set;
 
 //Singleton
@@ -55,7 +54,7 @@ public class ServerMain {
     }
 
     public Set<AdministratorInfoMsg> getAdministrators(){
-        return this.administrators.getList();
+        return this.administrators.getSet();
     }
 
     //Administrator
@@ -72,7 +71,7 @@ public class ServerMain {
     }
 
     public Set<HouseInfoMsg> getHouses(){
-        return this.houses.getList();
+        return this.houses.getSet();
     }
 
     public boolean removeHouse(HouseInfoMsg house){

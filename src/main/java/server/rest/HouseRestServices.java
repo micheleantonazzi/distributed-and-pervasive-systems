@@ -2,13 +2,13 @@ package server.rest;
 
 import aspects.annotations.ProtoInput;
 import aspects.annotations.Notification;
+import messages.HouseMsgs.HouseInfoListMsg;
 import messages.HouseMsgs.HouseInfoMsg;
 import server.ServerMain;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -39,7 +39,7 @@ public class HouseRestServices {
                 return Response.status(423).build();
         }
         ServerMain.getInstance().addHouse(msg);
-        return Response.ok().build();
+        return Response.ok(HouseInfoListMsg.newBuilder().addAllHouse(houses).build().toByteArray()).build();
     }
 
     @POST
