@@ -74,4 +74,8 @@ public class ServerMain {
     public Set<HouseInfoMsg> getHouses(){
         return this.houses.getList();
     }
+
+    public boolean removeHouse(HouseInfoMsg house){
+        return this.houses.remove(house);
+    }
 }

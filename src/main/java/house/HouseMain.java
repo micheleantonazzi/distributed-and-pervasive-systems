@@ -14,7 +14,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class HouseMain {
@@ -22,16 +21,17 @@ public class HouseMain {
     //STATIC VARIABLES
     private static String ADDRESS = "localhost";
     private static int PORT = 8888;
+    private static int ID;
     public static void main(String[] args) {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(ServerMain.SERVER_URI);
         try{
             Server server = ServerBuilder.forPort(PORT).addService(new HouseRpcServices()).build();
-            Response response = target.path("house/enter").request().post(
-                    Entity.entity(HouseInfoMsg.newBuilder().setId((ADDRESS + PORT).hashCode()).setAddress(ADDRESS).setPort(PORT).build().toByteArray(),
-                            MediaType.APPLICATION_OCTET_STREAM));
 
-            System.out.println(response.getStatus());
+            ID = (ADDRESS + PORT).hashCode();
+            Response response = target.path("house/enter").request().post(
+                    Entity.entity(HouseInfoMsg.newBuilder().setId(ID).setAddress(ADDRESS).setPort(PORT).build().toByteArray(),
+                            MediaType.APPLICATION_OCTET_STREAM));
 
             //buffered reader to read from standard input
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -46,6 +46,11 @@ public class HouseMain {
 
                 }
             }
+
+            //Disconnect to the network
+            target.path("house/leave").request().post(
+                    Entity.entity(HouseInfoMsg.newBuilder().setId(ID).setAddress(ADDRESS).setPort(PORT).build().toByteArray(),
+                            MediaType.APPLICATION_OCTET_STREAM));
         }
         catch (ProcessingException ex){
             Throwable cause = ex.getCause();

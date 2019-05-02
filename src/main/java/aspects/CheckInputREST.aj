@@ -49,6 +49,6 @@ public aspect CheckInputREST {
             System.out.println(ex);
             return Response.status(500).build();
         }
-        return  proceed(inputStream, protoInput);
+        return proceed(inputStream, protoInput);
     }
 }

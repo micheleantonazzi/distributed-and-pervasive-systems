@@ -11,5 +11,4 @@ import java.lang.annotation.Target;
 public @interface Notification {
 
     String text();
-    boolean checkInput() default false;
 }
