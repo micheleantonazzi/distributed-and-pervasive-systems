@@ -69,15 +69,14 @@ public class HouseMain {
             }
 
             //Disconnect to the network
-            target.path("house/leave").request().post(
-                    Entity.entity(HouseInfoMsg.newBuilder().setId(ID).setAddress(ADDRESS).setPort(PORT).build().toByteArray(),
-                            MediaType.APPLICATION_OCTET_STREAM));
+            target.path("house/leave/" + ID).request().delete();
         }
         catch (ProcessingException ex){
             Throwable cause = ex.getCause();
             if (cause.getClass().getName().equals("java.net.ConnectException"))
                 //if the connection doesn't exist maybe the server isn't running
                 System.out.println("ERROR, the server couldn't be contacted, please check if it running.");
+            System.out.println("ssss");
         }
         catch (IOException ex){
             System.out.println(ex);

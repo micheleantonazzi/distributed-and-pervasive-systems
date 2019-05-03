@@ -26,7 +26,6 @@ public class ServerMain {
 
     //INSTANCE VARIABLES
     private HashSetSynchronized<AdministratorInfoMsg> administrators = new HashSetSynchronized<>();
-    private HashSetSynchronized<HouseInfoMsg> houses = new HashSetSynchronized<>();
 
     //Private constructor
     private ServerMain(){}
@@ -64,17 +63,5 @@ public class ServerMain {
 
     public boolean removeAdministrator(AdministratorInfoMsg element){
         return this.administrators.remove(element);
-    }
-
-    public boolean addHouse(HouseInfoMsg element) {
-        return this.houses.add(element);
-    }
-
-    public Set<HouseInfoMsg> getHouses(){
-        return this.houses.getSet();
-    }
-
-    public boolean removeHouse(HouseInfoMsg house){
-        return this.houses.remove(house);
     }
 }

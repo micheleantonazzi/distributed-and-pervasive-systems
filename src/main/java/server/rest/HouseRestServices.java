@@ -4,11 +4,10 @@ import aspects.annotations.ProtoInput;
 import aspects.annotations.Notification;
 import messages.HouseMsgs.HouseInfoListMsg;
 import messages.HouseMsgs.HouseInfoMsg;
+import server.Houses;
 import server.ServerMain;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -32,31 +31,26 @@ public class HouseRestServices {
             return Response.status(500).build();
         }
 
-        Set<HouseInfoMsg> houses = ServerMain.getInstance().getHouses();
-        for (HouseInfoMsg house : houses){
-            if (house.getId() == msg.getId())
-                // 423 is returned when the id is already used
+        Set<HouseInfoMsg> houses;
+
+        synchronized (Houses.getInstance()){
+            if(!Houses.getInstance().add(msg))
+                //423 is returned when the id is already present
                 return Response.status(423).build();
+            houses = Houses.getInstance().getSet();
         }
-        ServerMain.getInstance().addHouse(msg);
+        //Remove current house
+        houses.remove(msg);
         return Response.ok(HouseInfoListMsg.newBuilder().addAllHouse(houses).build().toByteArray()).build();
+
     }
 
-    @POST
-    @Path("leave")
+    @DELETE
+    @Path("leave/{id}")
     @Consumes(MediaType.APPLICATION_OCTET_STREAM)
-    @ProtoInput(proto = HouseInfoMsg.class)
     @Notification(text = "A house leaves the network.")
-    public Response leave(InputStream inputStream){
-        HouseInfoMsg msg = null;
-        try {
-            msg = HouseInfoMsg.parseFrom(inputStream);
-        } catch (IOException ex) {
-            System.out.println(ex);
-            return Response.status(500).build();
-        }
-
-        if(!ServerMain.getInstance().removeHouse(msg))
+    public Response leave(@PathParam("id") int id){
+        if(!Houses.getInstance().removeHouseFromId(id))
             //422 = Unprocessable Entity
             return Response.status(422).build();
         return Response.ok().build();

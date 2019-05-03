@@ -6,6 +6,7 @@ import javax.ws.rs.core.Response;
 import aspects.annotations.ProtoInput;
 import messages.AdministratorInfoMsgOuterClass.AdministratorInfoMsg;
 import messages.HouseMsgs.HouseInfoListMsg;
+import server.Houses;
 import server.ServerMain;
 
 
@@ -50,7 +51,7 @@ public class AdministratorRestServices {
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     @Path("houses")
     public Response houses(){
-        HouseInfoListMsg houseList = HouseInfoListMsg.newBuilder().addAllHouse(ServerMain.getInstance().getHouses()).build();
+        HouseInfoListMsg houseList = HouseInfoListMsg.newBuilder().addAllHouse(Houses.getInstance().getSet()).build();
         return Response.ok(houseList.toByteArray(), MediaType.APPLICATION_OCTET_STREAM).build();
     }
 }
