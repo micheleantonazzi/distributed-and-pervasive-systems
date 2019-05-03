@@ -2,7 +2,7 @@ package aspects;
 
 import aspects.annotations.Notification;
 import messages.AdministratorInfoMsgOuterClass.AdministratorInfoMsg;
-import server.ServerMain;
+import server.Administrators;
 import server.threads.RunnableNotification;
 import javax.ws.rs.core.Response;
 import java.util.Set;
@@ -18,7 +18,7 @@ public aspect NotificationAspect {
     after(Notification notification) returning(Object ret): sendNotification(notification){
         Response response = (Response) ret;
         if(response.getStatus() == 200){
-            Set<AdministratorInfoMsg> administrators = ServerMain.getInstance().getAdministrators();
+            Set<AdministratorInfoMsg> administrators = Administrators.getInstance().getSet();
             for(AdministratorInfoMsg connectionInfoMsg : administrators)
                 new Thread(new RunnableNotification(connectionInfoMsg, notification.text())).start();
         }

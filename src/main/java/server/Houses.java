@@ -31,9 +31,8 @@ public class Houses extends HashSetSynchronized<HouseInfoMsg> {
         Set<HouseInfoMsg> houses = super.getSet();
         System.out.println(houses);
         for (HouseInfoMsg house : houses){
-            if (house.getId() == id){
+            if (house.getId() == id)
                 return super.remove(house);
-            }
         }
         return false;
     }

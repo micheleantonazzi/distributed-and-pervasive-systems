@@ -24,9 +24,6 @@ public class ServerMain {
 
     private static ServerMain instance = null;
 
-    //INSTANCE VARIABLES
-    private HashSetSynchronized<AdministratorInfoMsg> administrators = new HashSetSynchronized<>();
-
     //Private constructor
     private ServerMain(){}
 
@@ -50,18 +47,5 @@ public class ServerMain {
             System.out.println("Server shutdown");
             server.shutdownNow();
         }
-    }
-
-    public Set<AdministratorInfoMsg> getAdministrators(){
-        return this.administrators.getSet();
-    }
-
-    //Administrator
-    public boolean addAdministrator(AdministratorInfoMsg element){
-        return this.administrators.add(element);
-    }
-
-    public boolean removeAdministrator(AdministratorInfoMsg element){
-        return this.administrators.remove(element);
     }
 }

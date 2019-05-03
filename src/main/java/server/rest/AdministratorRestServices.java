@@ -6,6 +6,7 @@ import javax.ws.rs.core.Response;
 import aspects.annotations.ProtoInput;
 import messages.AdministratorInfoMsgOuterClass.AdministratorInfoMsg;
 import messages.HouseMsgs.HouseInfoListMsg;
+import server.Administrators;
 import server.Houses;
 import server.ServerMain;
 
@@ -24,7 +25,7 @@ public class AdministratorRestServices {
     public Response connect(InputStream stream){
         try{
             AdministratorInfoMsg administrator = AdministratorInfoMsg.parseFrom(stream);
-            ServerMain.getInstance().addAdministrator(administrator);
+            Administrators.getInstance().add(administrator);
         }catch (IOException ex){
             System.out.println(ex.getMessage());
             return Response.status(500).build();
@@ -39,7 +40,7 @@ public class AdministratorRestServices {
     public Response disconnect(InputStream inputStream){
         try {
             AdministratorInfoMsg administratorInfoMsg = AdministratorInfoMsg.parseFrom(inputStream);
-            System.out.println(ServerMain.getInstance().removeAdministrator(administratorInfoMsg));
+            System.out.println(Administrators.getInstance().remove(administratorInfoMsg));
         } catch (IOException ex) {
             System.out.println(ex);
             return Response.status(500).build();

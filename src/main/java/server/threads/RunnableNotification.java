@@ -2,7 +2,7 @@ package server.threads;
 
 import messages.NotificationMsgOuterClass.NotificationMsg;
 import messages.AdministratorInfoMsgOuterClass.AdministratorInfoMsg;
-import server.ServerMain;
+import server.Administrators;
 
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Client;
@@ -40,7 +40,7 @@ public class RunnableNotification implements Runnable {
 
         }
         while(retry < 4);
-        ServerMain.getInstance().removeAdministrator(this.connectionInfo);
+        Administrators.getInstance().remove(this.connectionInfo);
 
     }
 }
