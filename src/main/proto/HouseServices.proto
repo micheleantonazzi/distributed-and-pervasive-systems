@@ -15,4 +15,6 @@ message Response{
 service HouseServices {
 
     rpc hello(messages.HouseInfoMsg) returns (Response);
+
+    rpc goodbye(messages.HouseInfoMsg) returns (Response);
 }

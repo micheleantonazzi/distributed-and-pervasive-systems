@@ -2,6 +2,7 @@ package house;
 
 import house.services.HouseServicesGrpc;
 import house.services.HouseServicesGrpc.HouseServicesBlockingStub;
+import house.threads.RunnableSayGoodbye;
 import house.threads.RunnableSayHello;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -45,15 +46,16 @@ public class HouseMain {
 
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(ServerMain.SERVER_URI);
-
+        Server server = null;
 
         try{
             boolean retry = false;
-            Server server;
+
 
             do{
                 try {
-                    server = ServerBuilder.forPort(PORT).addService(new HouseGrpcServices()).build().start();
+                    server = ServerBuilder.forPort(PORT).addService(new HouseGrpcServices()).build();
+                    server.start();
                     retry = true;
                 }
                 catch (IOException ex){
@@ -77,10 +79,9 @@ public class HouseMain {
             Houses.getInstance().setHouses(HouseInfoListMsg.parseFrom(response.readEntity(InputStream.class)).getHouseList());
 
             //Say hello to other houses
-            for (HouseInfoMsg house : Houses.getInstance().getSet()){
+            for (HouseInfoMsg house : Houses.getInstance().getSet())
                 new Thread(new RunnableSayHello(HOUSE_INFO, house)).start();
 
-            }
 
 
             //buffered reader to read from standard input
@@ -108,12 +109,21 @@ public class HouseMain {
         catch (IOException ex){
             System.out.println(ex);
         }
-        catch (Exception ex){
-            System.out.println(ex);
-        }
         finally {
             //Disconnect to the network
             target.path("house/leave/" + ID).request().delete();
+
+            for (HouseInfoMsg house : Houses.getInstance().getSet()){
+                Thread a = new Thread(new RunnableSayGoodbye(HOUSE_INFO, house));
+                a.start();
+            }
+
+            client.close();
+
+            if(server != null) {
+                server.shutdown();
+            }
+
         }
     }
 }

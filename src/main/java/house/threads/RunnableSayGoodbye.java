@@ -3,11 +3,11 @@ package house.threads;
 import messages.HouseMsgs.HouseInfoMsg;
 import utility.Houses;
 
-public class RunnableSayHello extends RunnableGrpc{
+public class RunnableSayGoodbye extends RunnableGrpc {
 
     private HouseInfoMsg thisHouse;
 
-    public RunnableSayHello(HouseInfoMsg thisHouse, HouseInfoMsg destinationHouse){
+    public RunnableSayGoodbye(HouseInfoMsg thisHouse, HouseInfoMsg destinationHouse){
         super(destinationHouse);
         this.thisHouse = thisHouse;
     }
@@ -15,7 +15,7 @@ public class RunnableSayHello extends RunnableGrpc{
     @Override
     public void run() {
         try{
-            super.getStub().hello(thisHouse);
+            super.getStub().goodbye(thisHouse);
         }
         catch (io.grpc.StatusRuntimeException ex){
             Throwable cause = ex.getCause().getCause();

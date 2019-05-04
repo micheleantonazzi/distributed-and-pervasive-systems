@@ -14,5 +14,17 @@ public class HouseGrpcServices extends HouseServicesImplBase {
         System.out.println(house);
 
         responseObserver.onNext(Response.newBuilder().setStatus(Response.Status.OK).build());
+
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void goodbye(HouseInfoMsg house, StreamObserver<Response> responseObserver){
+        Houses.getInstance().remove(house);
+        System.out.println("rimossa " + house);
+
+        responseObserver.onNext(Response.newBuilder().setStatus(Response.Status.OK).build());
+
+        responseObserver.onCompleted();
     }
 }

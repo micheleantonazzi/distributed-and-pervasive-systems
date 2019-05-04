@@ -20,8 +20,8 @@ To run the main classes you have to open different terminal and  digit
 ```
 mvn package exec:java -Dexec.mainClass=server.ServerMain
 mvn package exec:java -Dexec.mainClass=administrator.AdministratorMain
-mvn package exec:java -Dexec.mainClass=house.HouseMain
-mvn package exec:java -Dexec.mainClass=house.HouseMain
+mvn package exec:java -Dexec.cleanupDaemonThreads=false -Dexec.mainClass=house.HouseMain
+mvn package exec:java -Dexec.cleanupDaemonThreads=false -Dexec.mainClass=house.HouseMain
 ...
 ```
 
