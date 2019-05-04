@@ -2,10 +2,13 @@ package utility;
 
 import messages.HouseMsgs.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Houses extends HashSetSynchronized<HouseInfoMsg> {
+public class Houses {
+
+    private Set<HouseInfoMsg> houses = new HashSet<>();
 
     //Singleton
     private static Houses instance;
@@ -18,28 +21,38 @@ public class Houses extends HashSetSynchronized<HouseInfoMsg> {
         return instance;
     }
 
-    @Override
     public synchronized boolean add(HouseInfoMsg element){
-        Set<HouseInfoMsg> houses = super.getSet();
-        for (HouseInfoMsg house : houses){
+        for (HouseInfoMsg house : this.houses){
             if (house.getId() == element.getId())
                 return false;
         }
-        return super.add(element);
+        return this.houses.add(element);
     }
 
     public synchronized boolean removeHouseFromId(int id){
-        Set<HouseInfoMsg> houses = super.getSet();
-        for (HouseInfoMsg house : houses){
+        for (HouseInfoMsg house : this.houses){
             if (house.getId() == id)
-                return super.remove(house);
+                return this.houses.remove(house);
         }
         return false;
     }
 
     public synchronized void setHouses(List<HouseInfoMsg> list){
         for(HouseInfoMsg house : list)
-            super.add(house);
+            this.houses.add(house);
     }
 
+    public synchronized Set<HouseInfoMsg> getSet() {
+
+        Set<HouseInfoMsg> ret = new HashSet<>(this.houses);
+        return ret;
+    }
+
+    public synchronized boolean remove(HouseInfoMsg house){
+        return this.houses.remove(house);
+    }
+
+    public synchronized int size(){
+        return this.houses.size();
+    }
 }
