@@ -44,19 +44,14 @@ public class SmartMeterSimulator extends Simulator {
     }
 
     private double getElecticityValue(double t){
-
         return Math.abs(A * Math.sin(W*t) + rnd.nextGaussian()*0.3);
-
     }
 
     public void boost() throws InterruptedException {
-
         boost = true;
 
         Thread.sleep(5000);
 
         boost = false;
-
-
     }
 }

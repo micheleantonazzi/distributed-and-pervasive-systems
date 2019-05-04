@@ -11,7 +11,6 @@ public class HouseGrpcServices extends HouseServicesImplBase {
     @Override
     public void hello(HouseInfoMsg house, StreamObserver<Response> responseObserver){
         Houses.getInstance().add(house);
-        System.out.println(house);
 
         responseObserver.onNext(Response.newBuilder().setStatus(Response.Status.OK).build());
 
@@ -21,7 +20,6 @@ public class HouseGrpcServices extends HouseServicesImplBase {
     @Override
     public void goodbye(HouseInfoMsg house, StreamObserver<Response> responseObserver){
         Houses.getInstance().remove(house);
-        System.out.println("rimossa " + house);
 
         responseObserver.onNext(Response.newBuilder().setStatus(Response.Status.OK).build());
 

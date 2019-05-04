@@ -2,6 +2,9 @@ package house;
 
 import house.services.HouseServicesGrpc;
 import house.services.HouseServicesGrpc.HouseServicesBlockingStub;
+import house.smartmeter.BufferSynchronized;
+import house.smartmeter.SmartMeterSimulator;
+import house.threads.RunnableReadMeasurements;
 import house.threads.RunnableSayGoodbye;
 import house.threads.RunnableSayHello;
 import io.grpc.ManagedChannel;
@@ -83,6 +86,9 @@ public class HouseMain {
                 new Thread(new RunnableSayHello(HOUSE_INFO, house)).start();
 
 
+            //Start smartMeter
+            new SmartMeterSimulator(BufferSynchronized.getInstance()).start();
+            new Thread(new RunnableReadMeasurements()).start();
 
             //buffered reader to read from standard input
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));

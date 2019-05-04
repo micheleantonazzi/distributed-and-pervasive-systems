@@ -23,6 +23,10 @@ public class ArrayListSynchronized<T> {
         return (List<T>) this.arrayList.clone();
     }
 
+    public synchronized int size(){
+        return this.arrayList.size();
+    }
+
     @Override
     public ArrayListSynchronized<T> clone(){
         ArrayListSynchronized<T> ret;
