@@ -7,11 +7,9 @@ import messages.HouseMsgs.HouseInfoMsg;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
-import utility.HashSetSynchronized;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.Set;
 
 //Singleton
 public class ServerMain {

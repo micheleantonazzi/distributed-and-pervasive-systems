@@ -44,8 +44,27 @@ public class HouseMain {
 
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(ServerMain.SERVER_URI);
+
+
         try{
-            Server server = ServerBuilder.forPort(PORT).addService(new HouseRpcServices()).build();
+            boolean retry = false;
+            Server server;
+
+            do{
+                try {
+                    server = ServerBuilder.forPort(PORT).addService(new HouseRpcServices()).build().start();
+                    retry = true;
+                }
+                catch (IOException ex){
+                    //In this case the server failed because the port is already used
+                    System.out.println("Port " + PORT + " is already used.\nRetry.");
+                    PORT += 1;
+                }
+            }
+            while (!retry);
+
+            System.out.println("House is running at port " + PORT);
+
 
             ID = (ADDRESS + PORT).hashCode();
             Response response = target.path("house/enter").request().post(
@@ -73,10 +92,11 @@ public class HouseMain {
         }
         catch (ProcessingException ex){
             Throwable cause = ex.getCause();
+            System.out.println(ex);
+            System.out.println(cause);
             if (cause.getClass().getName().equals("java.net.ConnectException"))
                 //if the connection doesn't exist maybe the server isn't running
                 System.out.println("ERROR, the server couldn't be contacted, please check if it running.");
-            System.out.println("ssss");
         }
         catch (IOException ex){
             System.out.println(ex);

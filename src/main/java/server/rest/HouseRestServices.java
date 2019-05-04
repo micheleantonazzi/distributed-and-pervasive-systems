@@ -39,6 +39,7 @@ public class HouseRestServices {
                 return Response.status(423).build();
             houses = Houses.getInstance().getSet();
         }
+
         //Remove current house
         houses.remove(msg);
         return Response.ok(HouseInfoListMsg.newBuilder().addAllHouse(houses).build().toByteArray()).build();
