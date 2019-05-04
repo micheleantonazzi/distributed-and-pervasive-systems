@@ -1,7 +1,8 @@
-package server;
+package utility;
 
 import messages.HouseMsgs.*;
-import utility.HashSetSynchronized;
+
+import java.util.List;
 import java.util.Set;
 
 public class Houses extends HashSetSynchronized<HouseInfoMsg> {
@@ -29,12 +30,16 @@ public class Houses extends HashSetSynchronized<HouseInfoMsg> {
 
     public synchronized boolean removeHouseFromId(int id){
         Set<HouseInfoMsg> houses = super.getSet();
-        System.out.println(houses);
         for (HouseInfoMsg house : houses){
             if (house.getId() == id)
                 return super.remove(house);
         }
         return false;
+    }
+
+    public synchronized void setHouses(List<HouseInfoMsg> list){
+        for(HouseInfoMsg house : list)
+            super.add(house);
     }
 
 }

@@ -3,12 +3,11 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import aspects.annotations.ProtoInput;
+import server.aspects.annotations.ProtoInput;
 import messages.AdministratorInfoMsgOuterClass.AdministratorInfoMsg;
 import messages.HouseMsgs.HouseInfoListMsg;
 import server.Administrators;
-import server.Houses;
-import server.ServerMain;
+import utility.Houses;
 
 
 import java.io.IOException;

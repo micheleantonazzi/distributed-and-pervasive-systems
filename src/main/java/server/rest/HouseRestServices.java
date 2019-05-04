@@ -1,11 +1,10 @@
 package server.rest;
 
-import aspects.annotations.ProtoInput;
-import aspects.annotations.Notification;
+import server.aspects.annotations.ProtoInput;
+import server.aspects.annotations.Notification;
 import messages.HouseMsgs.HouseInfoListMsg;
 import messages.HouseMsgs.HouseInfoMsg;
-import server.Houses;
-import server.ServerMain;
+import utility.Houses;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

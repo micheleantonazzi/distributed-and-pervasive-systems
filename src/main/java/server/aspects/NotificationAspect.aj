@@ -1,6 +1,6 @@
-package aspects;
+package server.aspects;
 
-import aspects.annotations.Notification;
+import server.aspects.annotations.Notification;
 import messages.AdministratorInfoMsgOuterClass.AdministratorInfoMsg;
 import server.Administrators;
 import server.threads.RunnableNotification;
@@ -12,7 +12,7 @@ import java.util.Set;
 public aspect NotificationAspect {
 
     pointcut sendNotification(Notification notification):
-            execution(* *..*.*(..)) && !within(aspects.NotificationAspect)
+            execution(* *..*.*(..)) && !within(server.aspects.NotificationAspect)
             && @annotation(notification);
 
     after(Notification notification) returning(Object ret): sendNotification(notification){

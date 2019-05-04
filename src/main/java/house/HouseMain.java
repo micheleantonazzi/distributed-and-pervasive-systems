@@ -1,11 +1,16 @@
 package house;
 
+import house.services.HouseServicesGrpc;
+import house.services.HouseServicesGrpc.HouseServicesBlockingStub;
+import house.threads.RunnableSayHello;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import messages.HouseMsgs.HouseInfoListMsg;
 import messages.HouseMsgs.HouseInfoMsg;
 import server.ServerMain;
-import utility.HashSetSynchronized;
+import utility.Houses;
 
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Client;
@@ -18,8 +23,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.List;
-import java.util.Set;
 
 public class HouseMain {
 
@@ -28,9 +31,7 @@ public class HouseMain {
     private static String ADDRESS = "localhost";
     private static int PORT = 8888;
     private static int ID;
-
-    //INSTANCE VARIABLES
-    private HashSetSynchronized<HouseInfoMsg> houses = new HashSetSynchronized<>();
+    private static HouseInfoMsg HOUSE_INFO;
 
     private HouseMain(){}
 
@@ -52,7 +53,7 @@ public class HouseMain {
 
             do{
                 try {
-                    server = ServerBuilder.forPort(PORT).addService(new HouseRpcServices()).build().start();
+                    server = ServerBuilder.forPort(PORT).addService(new HouseGrpcServices()).build().start();
                     retry = true;
                 }
                 catch (IOException ex){
@@ -65,13 +66,22 @@ public class HouseMain {
 
             System.out.println("House is running at port " + PORT);
 
-
             ID = (ADDRESS + PORT).hashCode();
+
+            HOUSE_INFO = HouseInfoMsg.newBuilder().setId(ID).setAddress(ADDRESS).setPort(PORT).build();
+
             Response response = target.path("house/enter").request().post(
-                    Entity.entity(HouseInfoMsg.newBuilder().setId(ID).setAddress(ADDRESS).setPort(PORT).build().toByteArray(),
+                    Entity.entity(HOUSE_INFO.toByteArray(),
                             MediaType.APPLICATION_OCTET_STREAM));
 
-            HouseMain.getInstance().setHouses(HouseInfoListMsg.parseFrom(response.readEntity(InputStream.class)).getHouseList());
+            Houses.getInstance().setHouses(HouseInfoListMsg.parseFrom(response.readEntity(InputStream.class)).getHouseList());
+
+            //Say hello to other houses
+            for (HouseInfoMsg house : Houses.getInstance().getSet()){
+                new Thread(new RunnableSayHello(HOUSE_INFO, house)).start();
+
+            }
+
 
             //buffered reader to read from standard input
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -83,12 +93,9 @@ public class HouseMain {
                         "\t- x to close the application");
                 input = reader.readLine();
                 if (input.equals("0")) {
-                    System.out.println(HouseMain.getInstance().getHouses());
+                    System.out.println(Houses.getInstance().getSet());
                 }
             }
-
-            //Disconnect to the network
-            target.path("house/leave/" + ID).request().delete();
         }
         catch (ProcessingException ex){
             Throwable cause = ex.getCause();
@@ -101,13 +108,12 @@ public class HouseMain {
         catch (IOException ex){
             System.out.println(ex);
         }
-    }
-
-    public void setHouses(List<HouseInfoMsg> list){
-        this.houses = new HashSetSynchronized<>(list);
-    }
-
-    public Set<HouseInfoMsg> getHouses(){
-        return this.houses.getSet();
+        catch (Exception ex){
+            System.out.println(ex);
+        }
+        finally {
+            //Disconnect to the network
+            target.path("house/leave/" + ID).request().delete();
+        }
     }
 }

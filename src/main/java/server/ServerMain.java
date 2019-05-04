@@ -1,9 +1,5 @@
 package server;
 
-
-
-import messages.AdministratorInfoMsgOuterClass.AdministratorInfoMsg;
-import messages.HouseMsgs.HouseInfoMsg;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;

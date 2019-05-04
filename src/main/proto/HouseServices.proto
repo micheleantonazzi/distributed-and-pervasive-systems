@@ -1,7 +1,18 @@
 syntax = "proto3";
-package house.proto.services;
+package house.services;
 
 import public "HouseMsgs.proto";
 
+message Response{
+    enum Status{
+        OK = 0;
+        ERROR = 1;
+    }
+
+    Status status = 1;
+}
+
 service HouseServices {
+
+    rpc hello(messages.HouseInfoMsg) returns (Response);
 }
