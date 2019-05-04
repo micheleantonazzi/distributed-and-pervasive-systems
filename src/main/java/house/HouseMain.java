@@ -1,14 +1,10 @@
 package house;
 
-import house.services.HouseServicesGrpc;
-import house.services.HouseServicesGrpc.HouseServicesBlockingStub;
 import house.smartmeter.BufferSynchronized;
 import house.smartmeter.SmartMeterSimulator;
-import house.threads.RunnableReadMeasurements;
+import house.threads.ThreadReadMeasurements;
 import house.threads.RunnableSayGoodbye;
 import house.threads.RunnableSayHello;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import messages.HouseMsgs.HouseInfoListMsg;
@@ -36,6 +32,8 @@ public class HouseMain {
     private static int PORT = 8888;
     private static int ID;
     private static HouseInfoMsg HOUSE_INFO;
+    private static ThreadReadMeasurements THREAD_READ_MEASUREMENTS = new ThreadReadMeasurements();
+    private static SmartMeterSimulator THREAD_SMART_METER = new SmartMeterSimulator(BufferSynchronized.getInstance());
 
     private HouseMain(){}
 
@@ -87,8 +85,8 @@ public class HouseMain {
 
 
             //Start smartMeter
-            new SmartMeterSimulator(BufferSynchronized.getInstance()).start();
-            new Thread(new RunnableReadMeasurements()).start();
+            THREAD_SMART_METER.start();
+            THREAD_READ_MEASUREMENTS.start();
 
             //buffered reader to read from standard input
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -118,6 +116,12 @@ public class HouseMain {
         finally {
             //Disconnect to the network
             target.path("house/leave/" + ID).request().delete();
+
+            THREAD_SMART_METER.stopMeGently();
+            THREAD_READ_MEASUREMENTS.stopMeGently();
+
+            //To get up THREAD_READ_MEASUREMENTS
+            BufferSynchronized.getInstance().notifyAll();
 
             for (HouseInfoMsg house : Houses.getInstance().getSet()){
                 Thread a = new Thread(new RunnableSayGoodbye(HOUSE_INFO, house));

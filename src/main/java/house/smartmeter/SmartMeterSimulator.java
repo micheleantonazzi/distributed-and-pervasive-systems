@@ -40,7 +40,6 @@ public class SmartMeterSimulator extends Simulator {
             i+=0.2;
 
         }
-
     }
 
     private double getElecticityValue(double t){
