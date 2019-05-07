@@ -118,10 +118,7 @@ public class HouseMain {
             target.path("house/leave/" + ID).request().delete();
 
             THREAD_SMART_METER.stopMeGently();
-            THREAD_READ_MEASUREMENTS.stopMeGently();
-
-            //To get up THREAD_READ_MEASUREMENTS
-            BufferSynchronized.getInstance().notifyAll();
+            THREAD_READ_MEASUREMENTS.stop();
 
             for (HouseInfoMsg house : Houses.getInstance().getSet()){
                 Thread a = new Thread(new RunnableSayGoodbye(HOUSE_INFO, house));

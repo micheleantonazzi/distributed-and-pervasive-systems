@@ -7,18 +7,12 @@ import java.util.List;
 
 public class ThreadReadMeasurements extends Thread{
 
-    private volatile boolean stop = false;
-
     @Override
     public void run() {
-        while (!this.stop){
+        while (true){
             List<Measurement> measurements = BufferSynchronized.getInstance().getMeasurements();
-            System.out.println(measurements);
+            double average = measurements.stream().mapToDouble(measurement -> measurement.getValue()).sum() / measurements.size();
+            System.out.println(average);
         }
-    }
-
-    public void stopMeGently(){
-        this.stop = true;
-        BufferSynchronized.getInstance().notifyAll();
     }
 }
