@@ -21,7 +21,7 @@ public abstract class RunnableGrpc implements Runnable {
         this.stub = HouseServicesGrpc.newBlockingStub(channel);
     }
 
-    protected HouseInfoMsg getDestinationHouse(){
+    public HouseInfoMsg getDestinationHouse(){
         return this.destinationHouse;
     }
 
@@ -29,7 +29,7 @@ public abstract class RunnableGrpc implements Runnable {
         return this.stub;
     }
 
-    protected ManagedChannel getChannel(){
+    public ManagedChannel getChannel(){
         return this.channel;
     }
 

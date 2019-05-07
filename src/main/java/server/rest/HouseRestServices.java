@@ -55,4 +55,15 @@ public class HouseRestServices {
             return Response.status(422).build();
         return Response.ok().build();
     }
+
+    @DELETE
+    @Path("unexpectedexit/{id}")
+    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
+    @Notification(text = "A house leaves the network.")
+    public Response unexpectedExit(@PathParam("id") int id){
+        if(!Houses.getInstance().removeHouseFromId(id))
+            //422 = Unprocessable Entity
+            return Response.status(422).build();
+        return Response.ok().build();
+    }
 }
