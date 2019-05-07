@@ -1,7 +1,6 @@
 package house.threads;
 
 import messages.HouseMsgs.HouseInfoMsg;
-import utility.Houses;
 
 public class RunnableSayGoodbye extends RunnableGrpc {
 

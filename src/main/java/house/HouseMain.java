@@ -67,9 +67,9 @@ public class HouseMain {
             }
             while (!retry);
 
-            System.out.println("House is running at port " + PORT);
+            ID = (ADDRESS + PORT + Math.random()).hashCode();
 
-            ID = (ADDRESS + PORT).hashCode();
+            System.out.println("House with id " + ID + " is running at port " + PORT);
 
             HOUSE_INFO = HouseInfoMsg.newBuilder().setId(ID).setAddress(ADDRESS).setPort(PORT).build();
 
