@@ -3,11 +3,10 @@ package house.smartmeter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 public class BufferSynchronized implements Buffer {
 
-    private Queue<Measurement> queue = new LinkedList<>();
+    private LinkedList<Measurement> queue = new LinkedList<>();
 
     private static BufferSynchronized instance;
 
@@ -27,9 +26,9 @@ public class BufferSynchronized implements Buffer {
             if(this.queue.size() >= 24)
                 notify();
         }
-
     }
 
+    // This type of synchronize works correctly only if there is a single thread that reads the measurements
     public List<Measurement> getMeasurements(){
         synchronized (this){
             if(this.queue.size() < 24) {
@@ -45,6 +44,8 @@ public class BufferSynchronized implements Buffer {
         List<Measurement> ret = new ArrayList<>();
         for(int i = 0; i < 12; ++i)
             ret.add(queue.remove());
+        for(int i = 0 ; i < 12; ++i)
+            ret.add(queue.get(i));
         return ret;
     }
 }
