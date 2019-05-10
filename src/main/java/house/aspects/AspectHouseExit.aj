@@ -1,7 +1,7 @@
 package house.aspects;
 
 import house.threads.RunnableGrpc;
-import utility.Houses;
+import utility.HousesAndStatistics;
 
 public aspect AspectHouseExit {
 
@@ -21,7 +21,7 @@ public aspect AspectHouseExit {
                     System.out.println("House " + runnableGrpc.getDestinationHouse().getId() + " is unexpectedly disconnected.");
 
                     //Remove house locally
-                    Houses.getInstance().remove(runnableGrpc.getDestinationHouse());
+                    HousesAndStatistics.getInstance().removeHouse(runnableGrpc.getDestinationHouse());
                 }
             }
             else

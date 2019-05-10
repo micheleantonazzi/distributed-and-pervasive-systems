@@ -10,7 +10,7 @@ import io.grpc.ServerBuilder;
 import messages.HouseMsgs.HouseInfoListMsg;
 import messages.HouseMsgs.HouseInfoMsg;
 import server.ServerMain;
-import utility.Houses;
+import utility.HousesAndStatistics;
 
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Client;
@@ -77,10 +77,10 @@ public class HouseMain {
                     Entity.entity(HOUSE_INFO.toByteArray(),
                             MediaType.APPLICATION_OCTET_STREAM));
 
-            Houses.getInstance().setHouses(HouseInfoListMsg.parseFrom(response.readEntity(InputStream.class)).getHouseList());
+            HousesAndStatistics.getInstance().setHouses(HouseInfoListMsg.parseFrom(response.readEntity(InputStream.class)).getHouseList());
 
             //Say hello to other houses
-            for (HouseInfoMsg house : Houses.getInstance().getSet())
+            for (HouseInfoMsg house : HousesAndStatistics.getInstance().getHouses())
                 new Thread(new RunnableSayHello(HOUSE_INFO, house)).start();
 
 
@@ -98,7 +98,7 @@ public class HouseMain {
                         "\t- x to close the application");
                 input = reader.readLine();
                 if (input.equals("0")) {
-                    System.out.println(Houses.getInstance().getSet());
+                    System.out.println(HousesAndStatistics.getInstance().getHouses());
                 }
             }
         }
@@ -120,7 +120,7 @@ public class HouseMain {
             THREAD_SMART_METER.stopMeGently();
             THREAD_READ_MEASUREMENTS.stop();
 
-            for (HouseInfoMsg house : Houses.getInstance().getSet()){
+            for (HouseInfoMsg house : HousesAndStatistics.getInstance().getHouses()){
                 Thread a = new Thread(new RunnableSayGoodbye(HOUSE_INFO, house));
                 a.start();
             }
