@@ -13,7 +13,7 @@ public class BufferSynchronized implements Buffer {
 
     private BufferSynchronized(){}
 
-    public static BufferSynchronized getInstance(){
+    public static synchronized BufferSynchronized getInstance(){
         if(instance == null)
             instance = new BufferSynchronized();
         return instance;

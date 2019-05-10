@@ -37,7 +37,7 @@ public class HouseMain {
 
     private HouseMain(){}
 
-    public static HouseMain getInstance(){
+    public synchronized static HouseMain getInstance(){
         if(instance == null)
             instance = new HouseMain();
         return instance;

@@ -15,7 +15,7 @@ public class Houses {
 
     private Houses(){}
 
-    public static Houses getInstance(){
+    public static synchronized Houses getInstance(){
         if (instance == null)
             instance = new Houses();
         return instance;

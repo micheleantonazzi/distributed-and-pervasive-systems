@@ -1,4 +1,4 @@
-package house;
+package house.aspects;
 
 import house.threads.RunnableGrpc;
 import utility.Houses;

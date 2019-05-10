@@ -9,7 +9,7 @@ public class Administrators extends HashSetSynchronized<AdministratorInfoMsg> {
 
     private Administrators(){}
 
-    public static Administrators getInstance(){
+    public static synchronized Administrators getInstance(){
         if (instance == null)
             instance = new Administrators();
         return instance;

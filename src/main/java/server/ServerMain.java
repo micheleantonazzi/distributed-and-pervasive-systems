@@ -21,7 +21,7 @@ public class ServerMain {
     //Private constructor
     private ServerMain(){}
 
-    public static ServerMain getInstance(){
+    public static synchronized ServerMain getInstance(){
         if (instance == null)
             instance = new ServerMain();
         return instance;
