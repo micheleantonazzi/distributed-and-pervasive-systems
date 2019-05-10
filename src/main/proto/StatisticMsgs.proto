@@ -1,0 +1,14 @@
+syntax = "proto3";
+package messages;
+
+import public "HouseMsgs.proto";
+
+message StatisticMsg{
+    double value = 2;
+    uint64 timestamp = 3;
+}
+
+message StatisticHouseMsg{
+    messages.HouseInfoMsg houseInfo = 1;
+    StatisticMsg statistic = 2;
+}

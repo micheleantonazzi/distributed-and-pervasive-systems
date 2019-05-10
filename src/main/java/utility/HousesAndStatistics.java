@@ -1,7 +1,7 @@
 package utility;
 
 import messages.HouseMsgs.HouseInfoMsg;
-import messages.StatisticMsgOuterClass.StatisticMsg;
+import messages.StatisticMsgs.StatisticMsg;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,5 +38,14 @@ public class HousesAndStatistics {
 
     public synchronized void removeHouse(HouseInfoMsg house){
         this.housesMap.remove(house);
+    }
+
+    public synchronized boolean addStatistic(HouseInfoMsg house, StatisticMsg statistic){
+        ArrayList<StatisticMsg> statistics = this.housesMap.get(house);
+        if(statistic == null){
+            return false;
+        }
+        statistics.add(statistic);
+        return true;
     }
 }

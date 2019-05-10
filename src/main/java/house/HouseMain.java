@@ -10,6 +10,7 @@ import io.grpc.ServerBuilder;
 import messages.HouseMsgs.HouseInfoListMsg;
 import messages.HouseMsgs.HouseInfoMsg;
 import server.ServerMain;
+import utility.Houses;
 import utility.HousesAndStatistics;
 
 import javax.ws.rs.ProcessingException;
@@ -23,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 
 public class HouseMain {
 
@@ -77,7 +79,10 @@ public class HouseMain {
                     Entity.entity(HOUSE_INFO.toByteArray(),
                             MediaType.APPLICATION_OCTET_STREAM));
 
-            HousesAndStatistics.getInstance().setHouses(HouseInfoListMsg.parseFrom(response.readEntity(InputStream.class)).getHouseList());
+            List<HouseInfoMsg> houses = HouseInfoListMsg.parseFrom(response.readEntity(InputStream.class)).getHouseList();
+
+            HousesAndStatistics.getInstance().setHouses(houses);
+            HousesAndStatistics.getInstance().addHouse(HOUSE_INFO);
 
             //Say hello to other houses
             for (HouseInfoMsg house : HousesAndStatistics.getInstance().getHouses())
@@ -132,5 +137,9 @@ public class HouseMain {
             }
 
         }
+    }
+
+    public static HouseInfoMsg getHouseInfo(){
+        return HOUSE_INFO;
     }
 }
