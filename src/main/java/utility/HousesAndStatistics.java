@@ -1,5 +1,6 @@
 package utility;
 
+import house.HouseMain;
 import javafx.util.Pair;
 import messages.HouseMsgs.HouseInfoMsg;
 import messages.StatisticMsgs.StatisticMsg;
@@ -32,6 +33,17 @@ public class HousesAndStatistics {
     public synchronized Set<HouseInfoMsg> getHouses(){
         return this.housesMap.keySet();
     }
+
+    public Set<HouseInfoMsg> getOtherHouses(){
+        Set<HouseInfoMsg> houses;
+        synchronized (this){
+            houses = this.housesMap.keySet();
+        }
+
+        houses.remove(HouseMain.getHouseInfo());
+        return houses;
+    }
+
 
     public synchronized void addHouse(HouseInfoMsg house){
         this.housesMap.put(house, new ArrayList<>());

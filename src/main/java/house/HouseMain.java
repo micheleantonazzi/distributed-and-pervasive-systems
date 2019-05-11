@@ -84,7 +84,7 @@ public class HouseMain {
             HousesAndStatistics.getInstance().addHouse(HOUSE_INFO);
 
             //Say hello to other houses
-            for (HouseInfoMsg house : HousesAndStatistics.getInstance().getHouses())
+            for (HouseInfoMsg house : HousesAndStatistics.getInstance().getOtherHouses())
                 new ThreadSayHello(HOUSE_INFO, house).start();
 
 
@@ -124,7 +124,7 @@ public class HouseMain {
             THREAD_SMART_METER.stopMeGently();
             THREAD_READ_MEASUREMENTS.stop();
 
-            for (HouseInfoMsg house : HousesAndStatistics.getInstance().getHouses())
+            for (HouseInfoMsg house : HousesAndStatistics.getInstance().getOtherHouses())
                 new ThreadSayGoodbye(HOUSE_INFO, house).start();
 
             client.close();

@@ -25,7 +25,7 @@ public aspect AspectHouseExit {
                 }
             }
             else
-                System.out.println(ex);
+                System.out.println("qui" + ex);
         }
         finally {
             threadGrpc.getChannel().shutdown();
