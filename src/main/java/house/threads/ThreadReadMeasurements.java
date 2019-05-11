@@ -3,6 +3,7 @@ package house.threads;
 import house.HouseMain;
 import house.smartmeter.BufferSynchronized;
 import house.smartmeter.Measurement;
+import house.threads.methods.ThreadSendStatistics;
 import messages.StatisticMsgs.StatisticMsg;
 import utility.HousesAndStatistics;
 
@@ -21,6 +22,9 @@ public class ThreadReadMeasurements extends Thread{
             // Add statistic about this house
             HousesAndStatistics.getInstance().addStatistic(HouseMain.getHouseInfo(), statistic);
 
+            // Send statistic to other houses
+            for(ThreadSendStatistics thread : HousesAndStatistics.getInstance().getThreadsSendStatistics())
+                thread.sendStatistic(statistic);
         }
     }
 }

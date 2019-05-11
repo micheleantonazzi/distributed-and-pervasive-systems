@@ -1,20 +1,20 @@
 package utility;
 
 import house.HouseMain;
-import javafx.util.Pair;
+import house.threads.methods.ThreadSendStatistics;
 import messages.HouseMsgs.HouseInfoMsg;
 import messages.StatisticMsgs.StatisticMsg;
+import org.javatuples.Pair;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
+
+// This class contains the houses with the relative statistics and threads used to send statistic
 public class HousesAndStatistics {
 
     private static HousesAndStatistics instance;
 
-    private HashMap<HouseInfoMsg, ArrayList<StatisticMsg>> housesMap = new HashMap<>();
+    private HashMap<HouseInfoMsg, Pair<ThreadSendStatistics, ArrayList<StatisticMsg>>> housesMap = new HashMap<>();
 
     public synchronized static HousesAndStatistics getInstance(){
         if (instance == null)
@@ -25,9 +25,19 @@ public class HousesAndStatistics {
     private HousesAndStatistics(){}
 
     public synchronized void setHouses(List<HouseInfoMsg> houses){
+        HouseInfoMsg currentHouse = HouseMain.getHouseInfo();
         this.housesMap = new HashMap<>();
-        for (HouseInfoMsg house : houses)
-            housesMap.put(house, new ArrayList<>());
+        for (HouseInfoMsg house : houses){
+            ThreadSendStatistics threadSendStatistics = null;
+
+            if(house != currentHouse){
+                threadSendStatistics = new ThreadSendStatistics(house);
+                threadSendStatistics.start();
+            }
+
+            housesMap.put(house, Pair.with(threadSendStatistics , new ArrayList<>()));
+        }
+
     }
 
     public synchronized Set<HouseInfoMsg> getHouses(){
@@ -46,19 +56,54 @@ public class HousesAndStatistics {
 
 
     public synchronized void addHouse(HouseInfoMsg house){
-        this.housesMap.put(house, new ArrayList<>());
+        this.housesMap.put(house, Pair.with(null, new ArrayList<>()));
     }
 
     public synchronized void removeHouse(HouseInfoMsg house){
+        Pair<ThreadSendStatistics, ArrayList<StatisticMsg>> pair = this.housesMap.get(house);
+        if(pair.getValue0() != null)
+            pair.getValue0().stopAndClose();
         this.housesMap.remove(house);
     }
 
     public synchronized boolean addStatistic(HouseInfoMsg house, StatisticMsg statistic){
-        ArrayList<StatisticMsg> statistics = this.housesMap.get(house);
-        if(statistic == null){
+        Pair<ThreadSendStatistics, ArrayList<StatisticMsg>> pair = this.housesMap.get(house);
+        if(pair == null){
             return false;
         }
-        statistics.add(statistic);
+        pair.getValue1().add(statistic);
         return true;
+    }
+
+    public Set<ThreadSendStatistics> getThreadsSendStatistics(){
+        HouseInfoMsg currentHouse = HouseMain.getHouseInfo();
+        HashMap<HouseInfoMsg, Pair<ThreadSendStatistics, ArrayList<StatisticMsg>>> housesMapClone;
+        Set<ThreadSendStatistics> ret = new HashSet<>();
+
+        synchronized (this){
+           housesMapClone = new HashMap<>(this.housesMap);
+        }
+
+        housesMapClone.remove(this.housesMap.get(currentHouse));
+
+        //System.out.println(housesMapClone);
+
+        for(HouseInfoMsg house : housesMapClone.keySet()){
+
+            Pair<ThreadSendStatistics, ArrayList<StatisticMsg>> pair = housesMapClone.get(house);
+            ThreadSendStatistics thread = pair.getValue0();
+
+            if(thread == null){
+                synchronized (this){
+                    thread = new ThreadSendStatistics(house);
+                    thread.start();
+                    this.housesMap.put(
+                            house, this.housesMap.get(house).setAt0(thread));
+                }
+            }
+            ret.add(thread);
+        }
+
+        return ret;
     }
 }

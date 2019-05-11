@@ -1,5 +1,6 @@
-package house.threads;
+package house.threads.methods;
 
+import house.threads.ThreadUnaryGrpc;
 import messages.HouseMsgs.HouseInfoMsg;
 
 public class ThreadSayGoodbye extends ThreadUnaryGrpc {

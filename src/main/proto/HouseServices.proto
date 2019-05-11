@@ -20,4 +20,5 @@ service HouseServices {
     rpc goodbye(messages.HouseInfoMsg) returns (Response);
 
     rpc sendStatistic(stream messages.StatisticHouseMsg) returns (Response);
+
 }

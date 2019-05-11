@@ -13,8 +13,8 @@ public abstract class ThreadGrpc extends Thread {
 
         this.destinationHouse = destinationHouse;
 
-        this.channel = ManagedChannelBuilder.forTarget(
-                this.destinationHouse.getAddress() + ":" + this.destinationHouse.getPort()).usePlaintext(true).build();
+        this.channel = ManagedChannelBuilder.forAddress(
+                this.destinationHouse.getAddress(), this.destinationHouse.getPort()).usePlaintext(true).build();
     }
 
     public HouseInfoMsg getDestinationHouse(){

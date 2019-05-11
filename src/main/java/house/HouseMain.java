@@ -3,8 +3,8 @@ package house;
 import house.smartmeter.BufferSynchronized;
 import house.smartmeter.SmartMeterSimulator;
 import house.threads.ThreadReadMeasurements;
-import house.threads.ThreadSayGoodbye;
-import house.threads.ThreadSayHello;
+import house.threads.methods.ThreadSayGoodbye;
+import house.threads.methods.ThreadSayHello;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import messages.HouseMsgs.HouseInfoListMsg;
@@ -65,6 +65,7 @@ public class HouseMain {
                     System.out.println("Port " + PORT + " is already used.\nRetry.");
                     PORT += 1;
                 }
+
             }
             while (!retry);
 
