@@ -6,13 +6,13 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import messages.HouseMsgs.HouseInfoMsg;
 
-public abstract class RunnableGrpc implements Runnable {
+public abstract class ThreadGrpc extends Thread {
 
     private ManagedChannel channel;
     private HouseServicesBlockingStub stub;
     private HouseInfoMsg destinationHouse;
 
-    public RunnableGrpc(HouseInfoMsg destinationHouse){
+    public ThreadGrpc(HouseInfoMsg destinationHouse){
 
         this.destinationHouse = destinationHouse;
 
@@ -32,5 +32,8 @@ public abstract class RunnableGrpc implements Runnable {
     public ManagedChannel getChannel(){
         return this.channel;
     }
+
+    @Override
+    public abstract void run();
 
 }

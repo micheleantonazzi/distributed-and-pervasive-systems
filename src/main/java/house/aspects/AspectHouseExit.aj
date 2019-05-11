@@ -1,16 +1,16 @@
 package house.aspects;
 
-import house.threads.RunnableGrpc;
+import house.threads.ThreadGrpc;
 import utility.HousesAndStatistics;
 
 public aspect AspectHouseExit {
 
-    pointcut HouseExit(RunnableGrpc runnableGrpc):
-            execution(* house.threads.RunnableGrpc.run()) && this(runnableGrpc);
+    pointcut HouseExit(ThreadGrpc threadGrpc):
+            execution(* house.threads.ThreadGrpc.run()) && this(threadGrpc);
 
-    Object around(RunnableGrpc runnableGrpc): HouseExit(runnableGrpc){
+    Object around(ThreadGrpc threadGrpc): HouseExit(threadGrpc){
         try{
-            return proceed(runnableGrpc);
+            return proceed(threadGrpc);
         }
         catch (Exception ex){
             if (ex instanceof io.grpc.StatusRuntimeException){
@@ -18,17 +18,17 @@ public aspect AspectHouseExit {
 
                 //The house isn't online
                 if(cause instanceof java.net.ConnectException){
-                    System.out.println("House " + runnableGrpc.getDestinationHouse().getId() + " is unexpectedly disconnected.");
+                    System.out.println("House " + threadGrpc.getDestinationHouse().getId() + " is unexpectedly disconnected.");
 
                     //Remove house locally
-                    HousesAndStatistics.getInstance().removeHouse(runnableGrpc.getDestinationHouse());
+                    HousesAndStatistics.getInstance().removeHouse(threadGrpc.getDestinationHouse());
                 }
             }
             else
                 System.out.println(ex);
         }
         finally {
-            runnableGrpc.getChannel().shutdown();
+            threadGrpc.getChannel().shutdown();
         }
         return new Object();
     }

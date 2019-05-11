@@ -3,14 +3,13 @@ package house;
 import house.smartmeter.BufferSynchronized;
 import house.smartmeter.SmartMeterSimulator;
 import house.threads.ThreadReadMeasurements;
-import house.threads.RunnableSayGoodbye;
-import house.threads.RunnableSayHello;
+import house.threads.ThreadSayGoodbye;
+import house.threads.ThreadSayHello;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import messages.HouseMsgs.HouseInfoListMsg;
 import messages.HouseMsgs.HouseInfoMsg;
 import server.ServerMain;
-import utility.Houses;
 import utility.HousesAndStatistics;
 
 import javax.ws.rs.ProcessingException;
@@ -86,7 +85,7 @@ public class HouseMain {
 
             //Say hello to other houses
             for (HouseInfoMsg house : HousesAndStatistics.getInstance().getHouses())
-                new Thread(new RunnableSayHello(HOUSE_INFO, house)).start();
+                new ThreadSayHello(HOUSE_INFO, house).start();
 
 
             //Start smartMeter
@@ -125,10 +124,8 @@ public class HouseMain {
             THREAD_SMART_METER.stopMeGently();
             THREAD_READ_MEASUREMENTS.stop();
 
-            for (HouseInfoMsg house : HousesAndStatistics.getInstance().getHouses()){
-                Thread a = new Thread(new RunnableSayGoodbye(HOUSE_INFO, house));
-                a.start();
-            }
+            for (HouseInfoMsg house : HousesAndStatistics.getInstance().getHouses())
+                new ThreadSayGoodbye(HOUSE_INFO, house).start();
 
             client.close();
 
@@ -140,6 +137,8 @@ public class HouseMain {
     }
 
     public static HouseInfoMsg getHouseInfo(){
-        return HOUSE_INFO;
+        synchronized (HOUSE_INFO){
+            return HOUSE_INFO;
+        }
     }
 }

@@ -2,18 +2,18 @@ package house.threads;
 
 import messages.HouseMsgs.HouseInfoMsg;
 
-public class RunnableSayGoodbye extends RunnableGrpc {
+public class ThreadSayHello extends ThreadGrpc {
 
     private HouseInfoMsg thisHouse;
 
-    public RunnableSayGoodbye(HouseInfoMsg thisHouse, HouseInfoMsg destinationHouse){
+    public ThreadSayHello(HouseInfoMsg thisHouse, HouseInfoMsg destinationHouse){
         super(destinationHouse);
         this.thisHouse = thisHouse;
     }
 
     @Override
     public void run() {
-        super.getStub().goodbye(thisHouse);
+        super.getStub().hello(thisHouse);
         super.getChannel().shutdown();
     }
 }

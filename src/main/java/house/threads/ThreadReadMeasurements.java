@@ -4,7 +4,6 @@ import house.HouseMain;
 import house.smartmeter.BufferSynchronized;
 import house.smartmeter.Measurement;
 import messages.StatisticMsgs.StatisticMsg;
-import messages.StatisticMsgs.StatisticHouseMsg;
 import utility.HousesAndStatistics;
 
 import java.util.List;

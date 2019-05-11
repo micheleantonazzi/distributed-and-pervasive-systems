@@ -1,5 +1,6 @@
 package utility;
 
+import javafx.util.Pair;
 import messages.HouseMsgs.HouseInfoMsg;
 import messages.StatisticMsgs.StatisticMsg;
 

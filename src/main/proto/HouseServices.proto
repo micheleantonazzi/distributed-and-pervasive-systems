@@ -2,6 +2,7 @@ syntax = "proto3";
 package house.services;
 
 import public "HouseMsgs.proto";
+import public "StatisticMsgs.proto";
 
 message Response{
     enum Status{
@@ -17,4 +18,6 @@ service HouseServices {
     rpc hello(messages.HouseInfoMsg) returns (Response);
 
     rpc goodbye(messages.HouseInfoMsg) returns (Response);
+
+    rpc sendStatistic(stream messages.StatisticHouseMsg) returns (Response);
 }
