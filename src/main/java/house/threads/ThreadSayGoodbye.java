@@ -2,7 +2,7 @@ package house.threads;
 
 import messages.HouseMsgs.HouseInfoMsg;
 
-public class ThreadSayGoodbye extends ThreadGrpc {
+public class ThreadSayGoodbye extends ThreadUnaryGrpc {
 
     private HouseInfoMsg thisHouse;
 

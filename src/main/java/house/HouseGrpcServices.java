@@ -29,6 +29,7 @@ public class HouseGrpcServices extends HouseServicesImplBase {
 
     @Override
     public StreamObserver<StatisticHouseMsg> sendStatistic(StreamObserver<Response> streamObserver){
+
         return new StreamObserver<StatisticHouseMsg>() {
             @Override
             public void onNext(StatisticHouseMsg statisticHouseMsg) {
@@ -44,6 +45,8 @@ public class HouseGrpcServices extends HouseServicesImplBase {
             @Override
             public void onCompleted() {
                 System.out.println("Casa uscita correttamente");
+                streamObserver.onNext(Response.newBuilder().setStatus(Response.Status.OK).build());
+                streamObserver.onCompleted();
             }
         };
     }
