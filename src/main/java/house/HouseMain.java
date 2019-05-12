@@ -125,6 +125,9 @@ public class HouseMain {
             THREAD_SMART_METER.stopMeGently();
             THREAD_READ_MEASUREMENTS.stop();
 
+            // Stop all threads that send statistic
+            HousesAndStatistics.getInstance().stopAll();
+
             for (HouseInfoMsg house : HousesAndStatistics.getInstance().getOtherHouses())
                 new ThreadSayGoodbye(HOUSE_INFO, house).start();
 

@@ -8,6 +8,7 @@ import messages.HouseMsgs.HouseInfoMsg;
 import messages.StatisticMsgs;
 import messages.StatisticMsgs.StatisticMsg;
 import messages.StatisticMsgs.StatisticHouseMsg;
+import utility.HousesAndStatistics;
 
 public class ThreadSendStatistics extends ThreadStreamGrpc {
 
@@ -22,12 +23,13 @@ public class ThreadSendStatistics extends ThreadStreamGrpc {
         this.sendStream = super.getStub().sendStatistic(new StreamObserver<Response>() {
             @Override
             public void onNext(Response response) {
-                System.out.println(response);
+                System.out.println("risposta");
             }
 
             @Override
             public void onError(Throwable throwable) {
-                System.out.println(throwable);
+                System.out.println("House " + destinationHouse.getId() + " is unexpectedly disconnected");
+                HousesAndStatistics.getInstance().removeHouse(destinationHouse);
             }
 
             @Override

@@ -106,4 +106,11 @@ public class HousesAndStatistics {
 
         return ret;
     }
+
+    public synchronized void stopAll(){
+        for(HouseInfoMsg house : this.housesMap.keySet()){
+            if(this.housesMap.get(house).getValue0() != null)
+                this.housesMap.get(house).getValue0().stopAndClose();
+        }
+    }
 }
