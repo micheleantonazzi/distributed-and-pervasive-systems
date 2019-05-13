@@ -35,8 +35,8 @@ public class Houses {
             ArrayList<StatisticMsg> statistics = this.houses.get(house);
 
             // To order statistics, the last is in the end
-            int i = statistics.size() - 1;
-            while (i > 0 && statistics.get(i).getTimestamp() > statistic.getTimestamp()){
+            int i = statistics.size();
+            while (i > 0 && statistics.get(i - 1).getTimestamp() > statistic.getTimestamp()){
                 i--;
             }
             this.houses.get(house).add(i, statistic);
@@ -93,6 +93,7 @@ public class Houses {
             for(int i = limit; i >= 0 && i > limit - number;--i)
                 statistics.add(oldStatistics.get(i));
         }
+        System.out.println(statistics);
 
         return statistics;
     }

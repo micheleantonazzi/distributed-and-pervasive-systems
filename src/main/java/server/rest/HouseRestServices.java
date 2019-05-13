@@ -62,6 +62,7 @@ public class HouseRestServices {
         }
         HouseInfoMsg house = statisticHouseMsg.getHouseInfo();
         StatisticMsg statistic = statisticHouseMsg.getStatistic();
+        System.out.println(house + " -> " + statistic);
 
         if(!Houses.getInstance().addStatistic(house, statistic))
             return Response.status(400).build();

@@ -26,9 +26,6 @@ public class ThreadSendStatistics extends ThreadStreamGrpc {
 
     private StreamObserver<StatisticMsgs.StatisticHouseMsg> sendStream;
 
-    Client client = ClientBuilder.newClient();
-    WebTarget target = client.target(ServerMain.SERVER_URI);
-
     public ThreadSendStatistics(HouseInfoMsg destinationHouse){
         super(destinationHouse);
         this.sendStream = super.getStub().sendStatistic(new StreamObserver<Response>() {
@@ -57,28 +54,6 @@ public class ThreadSendStatistics extends ThreadStreamGrpc {
                 try {
                     this.lock.wait();
 
-                    // Send asynchronously statistic to server
-                    new Thread(()->{
-                        try{
-                            target.path("house/sendstatistic").request().post(
-                                    Entity.entity(
-                                            StatisticHouseMsg.newBuilder()
-                                                    .setHouseInfo(HouseMain.getHouseInfo())
-                                                    .setStatistic(statistic).build().toByteArray(),
-                                            MediaType.APPLICATION_OCTET_STREAM));
-                        }
-                        catch (ProcessingException ex){
-                            Throwable cause = ex.getCause();
-                            System.out.println(ex);
-                            System.out.println(cause);
-                            if (cause.getClass().getName().equals("java.net.ConnectException"))
-                                //if the connection doesn't exist maybe the server isn't running
-                                System.out.println("ERROR, the server couldn't be contacted, please check if it running.");
-                            else
-                                System.out.println(ex);
-                        }
-                    }).start();
-
                     // Send statistic to other houses
                     this.sendStream.onNext(
                             StatisticHouseMsg.newBuilder()
@@ -99,7 +74,6 @@ public class ThreadSendStatistics extends ThreadStreamGrpc {
     }
 
     public void stopAndClose(){
-        this.client.close();
         this.sendStream.onCompleted();
         this.getChannel().shutdown();
         this.stop();

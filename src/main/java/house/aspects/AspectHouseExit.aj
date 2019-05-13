@@ -9,7 +9,6 @@ public aspect AspectHouseExit {
             execution(* house.threads.grpc.ThreadGrpc.run()) && this(threadGrpc);
 
     Object around(ThreadGrpc threadGrpc): HouseExit(threadGrpc){
-        System.out.println("aspecy");
         try{
             return proceed(threadGrpc);
         }

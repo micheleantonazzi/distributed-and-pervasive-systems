@@ -123,7 +123,7 @@ public class HouseMain {
             target.path("house/leave/" + ID).request().delete();
 
             THREAD_SMART_METER.stopMeGently();
-            THREAD_READ_MEASUREMENTS.stop();
+            THREAD_READ_MEASUREMENTS.stopAndClose();
 
             // Stop all threads that send statistic
             HousesAndStatistics.getInstance().stopAll();
