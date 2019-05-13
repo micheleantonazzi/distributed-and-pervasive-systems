@@ -61,7 +61,7 @@ public class HousesAndStatistics {
 
     public synchronized void removeHouse(HouseInfoMsg house){
         Pair<ThreadSendStatistics, ArrayList<StatisticMsg>> pair = this.housesMap.get(house);
-        if(pair.getValue0() != null)
+        if(pair != null && pair.getValue0() != null)
             pair.getValue0().stopAndClose();
         this.housesMap.remove(house);
     }

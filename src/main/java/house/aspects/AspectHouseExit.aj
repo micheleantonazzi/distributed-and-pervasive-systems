@@ -1,14 +1,15 @@
 package house.aspects;
 
-import house.threads.ThreadGrpc;
+import house.threads.grpc.ThreadGrpc;
 import utility.HousesAndStatistics;
 
 public aspect AspectHouseExit {
 
     pointcut HouseExit(ThreadGrpc threadGrpc):
-            execution(* house.threads.ThreadGrpc.run()) && this(threadGrpc);
+            execution(* house.threads.grpc.ThreadGrpc.run()) && this(threadGrpc);
 
     Object around(ThreadGrpc threadGrpc): HouseExit(threadGrpc){
+        System.out.println("aspecy");
         try{
             return proceed(threadGrpc);
         }
@@ -25,7 +26,7 @@ public aspect AspectHouseExit {
                 }
             }
             else
-                System.out.println("qui" + ex);
+                System.out.println(ex);
         }
         finally {
             threadGrpc.getChannel().shutdown();

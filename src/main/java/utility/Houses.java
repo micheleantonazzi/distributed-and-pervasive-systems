@@ -39,8 +39,7 @@ public class Houses {
             while (i > 0 && statistics.get(i).getTimestamp() > statistic.getTimestamp()){
                 i--;
             }
-            this.houses.get(house).add(i + 1, statistic);
-            System.out.println(this.houses.get(house));
+            this.houses.get(house).add(i, statistic);
             return true;
         }
         return false;
