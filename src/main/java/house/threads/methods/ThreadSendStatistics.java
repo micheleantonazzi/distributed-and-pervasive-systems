@@ -8,7 +8,14 @@ import messages.HouseMsgs.HouseInfoMsg;
 import messages.StatisticMsgs;
 import messages.StatisticMsgs.StatisticMsg;
 import messages.StatisticMsgs.StatisticHouseMsg;
+import server.ServerMain;
 import utility.HousesAndStatistics;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 
 public class ThreadSendStatistics extends ThreadStreamGrpc {
 
@@ -17,6 +24,9 @@ public class ThreadSendStatistics extends ThreadStreamGrpc {
     private Object lock = new Object();
 
     private StreamObserver<StatisticMsgs.StatisticHouseMsg> sendStream;
+
+    Client client = ClientBuilder.newClient();
+    WebTarget target = client.target(ServerMain.SERVER_URI);
 
     public ThreadSendStatistics(HouseInfoMsg destinationHouse){
         super(destinationHouse);
@@ -45,6 +55,18 @@ public class ThreadSendStatistics extends ThreadStreamGrpc {
             synchronized (this.lock){
                 try {
                     this.lock.wait();
+
+                    // Send asynchronously statistic to server
+                    new Thread(()->{
+                        target.path("house/sendstatistic").request().post(
+                                Entity.entity(
+                                        StatisticHouseMsg.newBuilder()
+                                                .setHouseInfo(HouseMain.getHouseInfo())
+                                                .setStatistic(statistic).build().toByteArray(),
+                                        MediaType.APPLICATION_OCTET_STREAM));
+                    }).start();
+
+                    // Send statistic to other houses
                     this.sendStream.onNext(
                             StatisticHouseMsg.newBuilder()
                                     .setHouseInfo(HouseMain.getHouseInfo()).setStatistic(this.statistic).build()
@@ -64,6 +86,7 @@ public class ThreadSendStatistics extends ThreadStreamGrpc {
     }
 
     public void stopAndClose(){
+        this.client.close();
         this.sendStream.onCompleted();
         this.getChannel().shutdown();
         this.stop();

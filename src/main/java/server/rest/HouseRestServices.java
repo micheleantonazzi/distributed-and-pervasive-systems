@@ -1,6 +1,7 @@
 package server.rest;
 
-import messages.StatisticMsgs;
+import messages.StatisticMsgs.StatisticMsg;
+import messages.StatisticMsgs.StatisticHouseMsg;
 import server.aspects.annotations.ProtoInput;
 import server.aspects.annotations.Notification;
 import messages.HouseMsgs.HouseInfoListMsg;
@@ -28,7 +29,7 @@ public class HouseRestServices {
             msg = HouseInfoMsg.parseFrom(inputStream);
         } catch (IOException ex) {
             System.out.println(ex);
-            return Response.status(500).build();
+            return Response.status(400).build();
         }
 
         Set<HouseInfoMsg> houses;
@@ -37,7 +38,6 @@ public class HouseRestServices {
             if(!Houses.getInstance().add(msg))
                 //423 is returned when the id is already present
                 return Response.status(423).build();
-            System.out.println("Casa aggiunta\n" + Houses.getInstance().size());
             houses = Houses.getInstance().getHouses();
         }
 
@@ -50,8 +50,21 @@ public class HouseRestServices {
     @POST
     @Path("sendstatistic")
     @Consumes(MediaType.APPLICATION_OCTET_STREAM)
-    @ProtoInput(proto = StatisticMsgs.StatisticHouseMsg.class)
+    @ProtoInput(proto = StatisticHouseMsg.class)
     public Response sendStatistic(InputStream inputStream){
+
+        StatisticHouseMsg statisticHouseMsg;
+        try {
+            statisticHouseMsg = StatisticHouseMsg.parseFrom(inputStream);
+        } catch (IOException ex) {
+            System.out.println(ex);
+            return Response.status(400).build();
+        }
+        HouseInfoMsg house = statisticHouseMsg.getHouseInfo();
+        StatisticMsg statistic = statisticHouseMsg.getStatistic();
+
+        if(!Houses.getInstance().addStatistic(house, statistic))
+            return Response.status(400).build();
 
         return Response.ok().build();
     }

@@ -29,6 +29,21 @@ public class Houses {
         return true;
     }
 
+    public synchronized boolean addStatistic(HouseInfoMsg house, StatisticMsg statistic){
+        if(this.houses.containsKey(house)){
+            ArrayList<StatisticMsg> statistics = this.houses.get(house);
+
+            // To order statistics, the last is in first position
+            int i = 0;
+            while (i < statistics.size() && statistics.get(i).getTimestamp() > statistic.getTimestamp()){
+                i++;
+            }
+            this.houses.get(house).add(i, statistic);
+            return true;
+        }
+        return false;
+    }
+
     public synchronized boolean removeHouseFromId(int id){
         for (HouseInfoMsg house : this.houses.keySet()){
             if (house.getId() == id){

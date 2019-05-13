@@ -103,7 +103,7 @@ public class HouseMain {
                         "\t- x to close the application");
                 input = reader.readLine();
                 if (input.equals("0")) {
-                    System.out.println(HousesAndStatistics.getInstance().getHouses());
+                    System.out.println(HousesAndStatistics.getInstance().getOtherHouses());
                 }
             }
         }
