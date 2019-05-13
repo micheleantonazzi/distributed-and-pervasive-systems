@@ -33,12 +33,13 @@ public class Houses {
         if(this.houses.containsKey(house)){
             ArrayList<StatisticMsg> statistics = this.houses.get(house);
 
-            // To order statistics, the last is in first position
-            int i = 0;
-            while (i < statistics.size() && statistics.get(i).getTimestamp() > statistic.getTimestamp()){
-                i++;
+            // To order statistics, the last is in the end
+            int i = statistics.size() - 1;
+            while (i > 0 && statistics.get(i).getTimestamp() > statistic.getTimestamp()){
+                i--;
             }
-            this.houses.get(house).add(i, statistic);
+            this.houses.get(house).add(i + 1, statistic);
+            System.out.println(this.houses.get(house));
             return true;
         }
         return false;
@@ -72,25 +73,27 @@ public class Houses {
 
     public List<StatisticMsg> getStatistics(int id, int number){
         List<StatisticMsg> statistics = null;
-        int oldNumber = 0;
-        ArrayList<StatisticMsg> oldStatistics = null;
+        ArrayList<StatisticMsg> oldStatistics = new ArrayList<>();
+        int limit = 0;
 
         synchronized (this){
             Set<HouseInfoMsg> keys = this.houses.keySet();
             for(Iterator<HouseInfoMsg> it = keys.iterator(); it.hasNext() && statistics == null;){
                 HouseInfoMsg house = it.next();
                 if(house.getId() == id){
-                    oldNumber = this.houses.get(house).size();
                     statistics = new ArrayList<>();
+                    // Save the arraylist because if the house exit it would be lost
                     oldStatistics = this.houses.get(house);
+                    limit = oldStatistics.size() - 1;
                 }
             }
         }
 
         if(statistics != null){
-            for(int i = 0; i < oldNumber && i < number; ++i)
+            for(int i = limit; i >= 0 && i > limit - number;--i)
                 statistics.add(oldStatistics.get(i));
         }
+
         return statistics;
     }
 }
