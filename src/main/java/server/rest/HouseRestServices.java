@@ -37,6 +37,7 @@ public class HouseRestServices {
             if(!Houses.getInstance().add(msg))
                 //423 is returned when the id is already present
                 return Response.status(423).build();
+            System.out.println("Casa aggiunta\n" + Houses.getInstance().size());
             houses = Houses.getInstance().getHouses();
         }
 

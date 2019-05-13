@@ -41,13 +41,13 @@ public class HousesAndStatistics {
     }
 
     public synchronized Set<HouseInfoMsg> getHouses(){
-        return this.housesMap.keySet();
+        return new HashSet<>(this.housesMap.keySet());
     }
 
     public Set<HouseInfoMsg> getOtherHouses(){
         Set<HouseInfoMsg> houses;
         synchronized (this){
-            houses = this.housesMap.keySet();
+            houses = new HashSet<>(this.housesMap.keySet());
         }
 
         houses.remove(HouseMain.getHouseInfo());
@@ -93,6 +93,7 @@ public class HousesAndStatistics {
             Pair<ThreadSendStatistics, ArrayList<StatisticMsg>> pair = housesMapClone.get(house);
             ThreadSendStatistics thread = pair.getValue0();
 
+            // Create thread if it's null
             if(thread == null){
                 synchronized (this){
                     thread = new ThreadSendStatistics(house);

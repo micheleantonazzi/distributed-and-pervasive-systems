@@ -25,7 +25,7 @@ public class Houses {
             if (house.getId() == element.getId())
                 return false;
         }
-        this.houses.put(element, new ArrayList<>());
+        this.houses.put(element, new ArrayList<StatisticMsg>());
         return true;
     }
 
@@ -39,14 +39,8 @@ public class Houses {
         return false;
     }
 
-    public synchronized void setHouses(List<HouseInfoMsg> list){
-        for(HouseInfoMsg house : list)
-            this.houses.put(house, new ArrayList<>());
-    }
-
     public synchronized Set<HouseInfoMsg> getHouses() {
-
-        return this.houses.keySet();
+        return new HashSet<>(this.houses.keySet());
     }
 
     public synchronized boolean remove(HouseInfoMsg house){
