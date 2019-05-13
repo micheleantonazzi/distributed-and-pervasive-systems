@@ -1,7 +1,7 @@
 package utility;
 
 import house.HouseMain;
-import house.threads.methods.ThreadSendStatistics;
+import house.threads.grpc.methods.ThreadSendStatistics;
 import messages.HouseMsgs.HouseInfoMsg;
 import messages.StatisticMsgs.StatisticMsg;
 import org.javatuples.Pair;

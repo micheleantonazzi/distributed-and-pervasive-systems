@@ -1,4 +1,4 @@
-package house.threads;
+package house.threads.grpc;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;

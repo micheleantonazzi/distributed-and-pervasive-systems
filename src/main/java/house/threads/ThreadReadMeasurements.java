@@ -3,7 +3,7 @@ package house.threads;
 import house.HouseMain;
 import house.smartmeter.BufferSynchronized;
 import house.smartmeter.Measurement;
-import house.threads.methods.ThreadSendStatistics;
+import house.threads.grpc.methods.ThreadSendStatistics;
 import messages.StatisticMsgs.StatisticMsg;
 import utility.HousesAndStatistics;
 

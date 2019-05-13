@@ -1,8 +1,8 @@
-package house.threads.methods;
+package house.threads.grpc.methods;
 
 import house.HouseMain;
 import house.services.HouseServicesOuterClass.Response;
-import house.threads.ThreadStreamGrpc;
+import house.threads.grpc.ThreadStreamGrpc;
 import io.grpc.stub.StreamObserver;
 import messages.HouseMsgs.HouseInfoMsg;
 import messages.StatisticMsgs;

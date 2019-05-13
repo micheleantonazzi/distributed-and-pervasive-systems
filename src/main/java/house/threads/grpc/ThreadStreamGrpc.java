@@ -1,4 +1,4 @@
-package house.threads;
+package house.threads.grpc;
 
 import house.services.HouseServicesGrpc;
 import house.services.HouseServicesGrpc.HouseServicesStub;
