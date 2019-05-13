@@ -3,6 +3,7 @@ package administrator;
 import messages.AdministratorInfoMsgOuterClass.AdministratorInfoMsg;
 import messages.HouseMsgs.HouseInfoMsg;
 import messages.HouseMsgs.HouseInfoListMsg;
+import messages.StatisticMsgs.StatisticsAverageAndDeviationMsg;
 import messages.StatisticMsgs.StatisticMsg;
 import messages.StatisticMsgs.StatisticListMsg;
 import org.glassfish.grizzly.http.server.HttpServer;
@@ -67,7 +68,8 @@ public class AdministratorMain {
                 while(!input.equals("x")){
                     System.out.println("Type:\n" +
                             "\t- 0 to get houses list\n" +
-                            "\t- 1 to get houses last N house statistics\n" +
+                            "\t- 1 to get the latest N statistics of a home\n" +
+                            "\t- 2 to get average and standard deviation of latest N statistics of a home\n" +
                             "\t- x to close the application");
                     input = reader.readLine();
                     if (input.equals("0")){
@@ -92,6 +94,21 @@ public class AdministratorMain {
                             StatisticListMsg statistics = StatisticListMsg.parseFrom(response.readEntity(InputStream.class));
                             for(StatisticMsg statistic : statistics.getStatisticList())
                                 System.out.println("- " + statistic.getTimestamp() +  " -> " + statistic.getValue());
+                        }
+                    }
+                    else if(input.equals("2")){
+                        System.out.println("Insert house id");
+                        String houseId = reader.readLine();
+                        System.out.println("Insert number of statistics");
+                        String number = reader.readLine();
+                        response = target.path("administrator/averagedeviation/" + houseId + "/" + number).request().get();
+                        if(response.getStatus() != 200)
+                            System.out.println("Request failed, response status: " + response.getStatus());
+                        else{
+                            StatisticsAverageAndDeviationMsg averageAndDeviation = StatisticsAverageAndDeviationMsg
+                                    .parseFrom(response.readEntity(InputStream.class));
+                            System.out.println("Average:  " + averageAndDeviation.getAverage() +  "\n" +
+                                    "Standard deviation: " + averageAndDeviation.getDeviation());
                         }
                     }
                 }

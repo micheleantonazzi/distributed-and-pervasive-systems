@@ -2,6 +2,7 @@ package utility;
 
 import messages.HouseMsgs.*;
 import messages.StatisticMsgs.StatisticMsg;
+import org.javatuples.Pair;
 
 import java.util.*;
 
@@ -95,5 +96,18 @@ public class Houses {
         }
 
         return statistics;
+    }
+
+    public Pair<Double, Double> getAverangeAndDeviation(int id, int number){
+        List<StatisticMsg> statistics = this.getStatistics(id, number);
+
+        if(statistics == null)
+            return null;
+
+        Double average = statistics.stream().mapToDouble((statistic) -> statistic.getValue()).sum() / statistics.size();
+
+        Double deviation = Math.sqrt((1.0 / statistics.size()) * statistics.stream().mapToDouble((statistic) -> Math.pow(statistic.getValue() - average, 2)).sum());
+
+        return Pair.with(average, deviation);
     }
 }

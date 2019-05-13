@@ -3,8 +3,10 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import messages.StatisticMsgs.StatisticsAverageAndDeviationMsg;
 import messages.StatisticMsgs.StatisticMsg;
 import messages.StatisticMsgs.StatisticListMsg;
+import org.javatuples.Pair;
 import server.aspects.annotations.ProtoInput;
 import messages.AdministratorInfoMsgOuterClass.AdministratorInfoMsg;
 import messages.HouseMsgs.HouseInfoListMsg;
@@ -69,6 +71,21 @@ public class AdministratorRestServices {
 
         return Response.ok(
                 StatisticListMsg.newBuilder().addAllStatistic(statistics).build().toByteArray(),
+                MediaType.APPLICATION_OCTET_STREAM).build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    @Path("averagedeviation/{house}/{number}")
+    public Response getAverageAndDeviation(@PathParam("house") int house, @PathParam("number") int number){
+        Pair<Double, Double> ret = Houses.getInstance().getAverangeAndDeviation(house, number);
+
+        if(ret == null)
+            return Response.status(400).build();
+
+        return Response.ok(
+                StatisticsAverageAndDeviationMsg.newBuilder()
+                        .setAverage(ret.getValue0()).setDeviation(ret.getValue1()).build().toByteArray(),
                 MediaType.APPLICATION_OCTET_STREAM).build();
     }
 }

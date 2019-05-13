@@ -13,6 +13,11 @@ message StatisticHouseMsg{
     StatisticMsg statistic = 2;
 }
 
+message StatisticsAverageAndDeviationMsg{
+    double average = 1;
+    double deviation = 2;
+}
+
 message StatisticListMsg{
     repeated StatisticMsg statistic = 1;
 }
