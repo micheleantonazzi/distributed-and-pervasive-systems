@@ -51,7 +51,7 @@ public class AdministratorRestServices {
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     @Path("houses")
     public Response houses(){
-        HouseInfoListMsg houseList = HouseInfoListMsg.newBuilder().addAllHouse(Houses.getInstance().getSet()).build();
+        HouseInfoListMsg houseList = HouseInfoListMsg.newBuilder().addAllHouse(Houses.getInstance().getHouses()).build();
         return Response.ok(houseList.toByteArray(), MediaType.APPLICATION_OCTET_STREAM).build();
     }
 }

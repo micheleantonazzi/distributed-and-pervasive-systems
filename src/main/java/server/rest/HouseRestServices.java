@@ -1,5 +1,6 @@
 package server.rest;
 
+import messages.StatisticMsgs;
 import server.aspects.annotations.ProtoInput;
 import server.aspects.annotations.Notification;
 import messages.HouseMsgs.HouseInfoListMsg;
@@ -36,13 +37,22 @@ public class HouseRestServices {
             if(!Houses.getInstance().add(msg))
                 //423 is returned when the id is already present
                 return Response.status(423).build();
-            houses = Houses.getInstance().getSet();
+            houses = Houses.getInstance().getHouses();
         }
 
         //Remove current house
         houses.remove(msg);
         return Response.ok(HouseInfoListMsg.newBuilder().addAllHouse(houses).build().toByteArray()).build();
 
+    }
+
+    @POST
+    @Path("sendstatistic")
+    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
+    @ProtoInput(proto = StatisticMsgs.StatisticHouseMsg.class)
+    public Response sendStatistic(InputStream inputStream){
+
+        return Response.ok().build();
     }
 
     @DELETE

@@ -23,7 +23,7 @@ public class ThreadSendStatistics extends ThreadStreamGrpc {
         this.sendStream = super.getStub().sendStatistic(new StreamObserver<Response>() {
             @Override
             public void onNext(Response response) {
-                System.out.println("risposta");
+
             }
 
             @Override

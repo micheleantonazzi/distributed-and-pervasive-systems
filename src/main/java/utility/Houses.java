@@ -1,14 +1,13 @@
 package utility;
 
 import messages.HouseMsgs.*;
+import messages.StatisticMsgs.StatisticMsg;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Houses {
 
-    private Set<HouseInfoMsg> houses = new HashSet<>();
+    private Map<HouseInfoMsg, ArrayList<StatisticMsg>> houses = new HashMap<>();
 
     //Singleton
     private static Houses instance;
@@ -22,34 +21,40 @@ public class Houses {
     }
 
     public synchronized boolean add(HouseInfoMsg element){
-        for (HouseInfoMsg house : this.houses){
+        for (HouseInfoMsg house : this.houses.keySet()){
             if (house.getId() == element.getId())
                 return false;
         }
-        return this.houses.add(element);
+        this.houses.put(element, new ArrayList<>());
+        return true;
     }
 
     public synchronized boolean removeHouseFromId(int id){
-        for (HouseInfoMsg house : this.houses){
-            if (house.getId() == id)
-                return this.houses.remove(house);
+        for (HouseInfoMsg house : this.houses.keySet()){
+            if (house.getId() == id){
+                this.houses.remove(house);
+                return true;
+            }
         }
         return false;
     }
 
     public synchronized void setHouses(List<HouseInfoMsg> list){
         for(HouseInfoMsg house : list)
-            this.houses.add(house);
+            this.houses.put(house, new ArrayList<>());
     }
 
-    public synchronized Set<HouseInfoMsg> getSet() {
+    public synchronized Set<HouseInfoMsg> getHouses() {
 
-        Set<HouseInfoMsg> ret = new HashSet<>(this.houses);
-        return ret;
+        return this.houses.keySet();
     }
 
     public synchronized boolean remove(HouseInfoMsg house){
-        return this.houses.remove(house);
+        if(this.houses.containsKey(house)){
+            this.houses.remove(house);
+            return true;
+        }
+        return false;
     }
 
     public synchronized int size(){
