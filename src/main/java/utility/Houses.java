@@ -44,7 +44,7 @@ public class Houses {
         return false;
     }
 
-    public synchronized boolean removeHouseFromId(int id){
+    public synchronized boolean remove(int id){
         for (HouseInfoMsg house : this.houses.keySet()){
             if (house.getId() == id){
                 this.houses.remove(house);
@@ -68,5 +68,29 @@ public class Houses {
 
     public synchronized int size(){
         return this.houses.size();
+    }
+
+    public List<StatisticMsg> getStatistics(int id, int number){
+        List<StatisticMsg> statistics = null;
+        int oldNumber = 0;
+        ArrayList<StatisticMsg> oldStatistics = null;
+
+        synchronized (this){
+            Set<HouseInfoMsg> keys = this.houses.keySet();
+            for(Iterator<HouseInfoMsg> it = keys.iterator(); it.hasNext() && statistics == null;){
+                HouseInfoMsg house = it.next();
+                if(house.getId() == id){
+                    oldNumber = this.houses.get(house).size();
+                    statistics = new ArrayList<>();
+                    oldStatistics = this.houses.get(house);
+                }
+            }
+        }
+
+        if(statistics != null){
+            for(int i = 0; i < oldNumber && i < number; ++i)
+                statistics.add(oldStatistics.get(i));
+        }
+        return statistics;
     }
 }

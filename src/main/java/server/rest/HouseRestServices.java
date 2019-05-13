@@ -74,7 +74,7 @@ public class HouseRestServices {
     @Consumes(MediaType.APPLICATION_OCTET_STREAM)
     @Notification(text = "A house leaves the network.")
     public Response leave(@PathParam("id") int id){
-        if(!Houses.getInstance().removeHouseFromId(id))
+        if(!Houses.getInstance().remove(id))
             //422 = Unprocessable Entity
             return Response.status(422).build();
         return Response.ok().build();
@@ -85,7 +85,7 @@ public class HouseRestServices {
     @Consumes(MediaType.APPLICATION_OCTET_STREAM)
     @Notification(text = "A house leaves the network.")
     public Response unexpectedExit(@PathParam("id") int id){
-        if(!Houses.getInstance().removeHouseFromId(id))
+        if(!Houses.getInstance().remove(id))
             //422 = Unprocessable Entity
             return Response.status(422).build();
         return Response.ok().build();

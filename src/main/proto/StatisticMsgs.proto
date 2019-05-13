@@ -12,3 +12,7 @@ message StatisticHouseMsg{
     messages.HouseInfoMsg houseInfo = 1;
     StatisticMsg statistic = 2;
 }
+
+message StatisticListMsg{
+    repeated StatisticMsg statistic = 1;
+}
