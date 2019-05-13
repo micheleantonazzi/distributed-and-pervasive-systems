@@ -98,7 +98,7 @@ public class Houses {
         return statistics;
     }
 
-    public Pair<Double, Double> getAverangeAndDeviation(int id, int number){
+    public Pair<Double, Double> getAverageAndDeviation(int id, int number){
         List<StatisticMsg> statistics = this.getStatistics(id, number);
 
         if(statistics == null)

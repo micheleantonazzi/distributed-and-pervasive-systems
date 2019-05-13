@@ -78,7 +78,7 @@ public class AdministratorRestServices {
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     @Path("averagedeviation/{house}/{number}")
     public Response getAverageAndDeviation(@PathParam("house") int house, @PathParam("number") int number){
-        Pair<Double, Double> ret = Houses.getInstance().getAverangeAndDeviation(house, number);
+        Pair<Double, Double> ret = Houses.getInstance().getAverageAndDeviation(house, number);
 
         if(ret == null)
             return Response.status(400).build();
