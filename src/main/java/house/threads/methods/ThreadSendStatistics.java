@@ -11,6 +11,7 @@ import messages.StatisticMsgs.StatisticHouseMsg;
 import server.ServerMain;
 import utility.HousesAndStatistics;
 
+import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -58,12 +59,24 @@ public class ThreadSendStatistics extends ThreadStreamGrpc {
 
                     // Send asynchronously statistic to server
                     new Thread(()->{
-                        target.path("house/sendstatistic").request().post(
-                                Entity.entity(
-                                        StatisticHouseMsg.newBuilder()
-                                                .setHouseInfo(HouseMain.getHouseInfo())
-                                                .setStatistic(statistic).build().toByteArray(),
-                                        MediaType.APPLICATION_OCTET_STREAM));
+                        try{
+                            target.path("house/sendstatistic").request().post(
+                                    Entity.entity(
+                                            StatisticHouseMsg.newBuilder()
+                                                    .setHouseInfo(HouseMain.getHouseInfo())
+                                                    .setStatistic(statistic).build().toByteArray(),
+                                            MediaType.APPLICATION_OCTET_STREAM));
+                        }
+                        catch (ProcessingException ex){
+                            Throwable cause = ex.getCause();
+                            System.out.println(ex);
+                            System.out.println(cause);
+                            if (cause.getClass().getName().equals("java.net.ConnectException"))
+                                //if the connection doesn't exist maybe the server isn't running
+                                System.out.println("ERROR, the server couldn't be contacted, please check if it running.");
+                            else
+                                System.out.println(ex);
+                        }
                     }).start();
 
                     // Send statistic to other houses
