@@ -8,15 +8,8 @@ import messages.HouseMsgs.HouseInfoMsg;
 import messages.StatisticMsgs;
 import messages.StatisticMsgs.StatisticMsg;
 import messages.StatisticMsgs.StatisticHouseMsg;
-import server.ServerMain;
 import utility.HousesAndStatistics;
 
-import javax.ws.rs.ProcessingException;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
 
 public class ThreadSendStatistics extends ThreadStreamGrpc {
 

@@ -7,6 +7,7 @@ import messages.StatisticMsgs.StatisticMsg;
 import org.javatuples.Pair;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 // This class contains the houses with the relative statistics and threads used to send statistic
@@ -63,6 +64,10 @@ public class HousesAndStatistics {
         Pair<ThreadSendStatistics, ArrayList<StatisticMsg>> pair = this.housesMap.get(house);
         if(pair != null && pair.getValue0() != null)
             pair.getValue0().stopAndClose();
+
+        // To get up ThreadGlobalStatistic
+        notify();
+
         this.housesMap.remove(house);
     }
 
@@ -72,6 +77,9 @@ public class HousesAndStatistics {
             return false;
         }
         pair.getValue1().add(statistic);
+
+        // To get up ThreadGlobalStatistic
+        notify();
         return true;
     }
 
@@ -84,9 +92,7 @@ public class HousesAndStatistics {
            housesMapClone = new HashMap<>(this.housesMap);
         }
 
-        housesMapClone.remove(this.housesMap.get(currentHouse));
-
-        //System.out.println(housesMapClone);
+        housesMapClone.remove(currentHouse);
 
         for(HouseInfoMsg house : housesMapClone.keySet()){
 
@@ -113,5 +119,46 @@ public class HousesAndStatistics {
             if(this.housesMap.get(house).getValue0() != null)
                 this.housesMap.get(house).getValue0().stopAndClose();
         }
+    }
+
+    private boolean allHaveStatistics(){
+        List<ArrayList<StatisticMsg>> allStatistics = this.housesMap.values()
+                .stream().map(pair -> pair.getValue1()).collect(Collectors.toList());
+        for(int i = 0; i < allStatistics.size(); ++i){
+            if (allStatistics.get(i).size() == 0)
+                return false;
+        }
+        return true;
+    }
+
+    public List<StatisticMsg> getAllStatistics(){
+        List<ArrayList<StatisticMsg>> allStatistics;
+
+        synchronized (this){
+
+            while(!this.allHaveStatistics()) {
+                try {
+                    wait();
+                } catch (InterruptedException ex) {
+                    System.out.println(ex);
+                }
+            }
+
+            allStatistics = this.housesMap.values()
+                    .stream().map(pair -> pair.getValue1()).collect(Collectors.toList());
+
+            // Delete old statistics
+            for(HouseInfoMsg house : this.housesMap.keySet())
+                this.housesMap.put(house,
+                        Pair.with(this.housesMap.get(house).getValue0(), new ArrayList<>()));
+        }
+
+        return allStatistics.stream().map((statistics)->{
+            long timestamp = statistics.get(statistics.size() - 1).getTimestamp();
+            int size = statistics.size();
+            return StatisticMsg.newBuilder()
+                    .setValue(statistics.stream().mapToDouble((statistic) -> statistic.getValue()).sum() / size)
+                    .setTimestamp(timestamp).build();
+        }).collect(Collectors.toList());
     }
 }

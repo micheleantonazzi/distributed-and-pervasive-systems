@@ -33,6 +33,7 @@ public class ThreadReadMeasurements extends Thread{
 
             // Add statistic about this house
             HousesAndStatistics.getInstance().addStatistic(HouseMain.getHouseInfo(), statistic);
+            System.out.println("Statistica locale aggiunta");
 
             // Send asynchronously statistic to server
             new Thread(()->{

@@ -37,9 +37,6 @@ public class AdministratorMain {
         WebTarget target = client.target(ServerMain.SERVER_URI);
         HttpServer server = null;
 
-        /*Response house = target.path("helloworld/hello").request().get();
-        System.out.println(House.parseFrom(house.readEntity(InputStream.class)));*/
-
         //the cycle serves to find a free door if the initial one in occupied
         boolean retry;
         do{

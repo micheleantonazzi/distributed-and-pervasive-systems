@@ -2,6 +2,7 @@ package house;
 
 import house.smartmeter.BufferSynchronized;
 import house.smartmeter.SmartMeterSimulator;
+import house.threads.ThreadGlobalStatistic;
 import house.threads.ThreadReadMeasurements;
 import house.threads.grpc.methods.ThreadSayGoodbye;
 import house.threads.grpc.methods.ThreadSayHello;
@@ -35,6 +36,7 @@ public class HouseMain {
     private static HouseInfoMsg HOUSE_INFO;
     private static ThreadReadMeasurements THREAD_READ_MEASUREMENTS = new ThreadReadMeasurements();
     private static SmartMeterSimulator THREAD_SMART_METER = new SmartMeterSimulator(BufferSynchronized.getInstance());
+    private static ThreadGlobalStatistic THREAD_GLOBAL_STATISTIC = new ThreadGlobalStatistic();
 
     private HouseMain(){}
 
@@ -92,6 +94,8 @@ public class HouseMain {
             //Start smartMeter
             THREAD_SMART_METER.start();
             THREAD_READ_MEASUREMENTS.start();
+            THREAD_GLOBAL_STATISTIC.start();
+
 
             //buffered reader to read from standard input
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -124,6 +128,7 @@ public class HouseMain {
 
             THREAD_SMART_METER.stopMeGently();
             THREAD_READ_MEASUREMENTS.stopAndClose();
+            THREAD_GLOBAL_STATISTIC.stop();
 
             // Stop all threads that send statistic
             HousesAndStatistics.getInstance().stopAll();
