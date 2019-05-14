@@ -2,14 +2,17 @@ package house;
 
 import messages.HouseMsgs.HouseInfoMsg;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Coordinator {
 
     private static Coordinator instance;
 
-    private Set<HouseInfoMsg> houses = new HashSet<>();
+    private List<HouseInfoMsg> houses = new ArrayList<>();
+
+    private boolean isCoordinator = false;
+
+    private boolean communicationWithOldCoordinator = false;
 
     private Coordinator(){}
 
@@ -33,5 +36,30 @@ public class Coordinator {
 
         notify();
         return false;
+    }
+
+    private boolean highest(){
+        return true;
+    }
+
+    // When this method ends this house has to become the coordinator
+    // It returns the old coordinator
+    public HouseInfoMsg becomeCoordinator(){
+        ArrayList<HouseInfoMsg> oldHouses;
+        synchronized (this){
+            while (this.isCoordinator || !highest()) {
+                try {
+                    wait();
+                } catch (InterruptedException ex) {
+                    System.out.println(ex);
+                }
+            }
+            oldHouses = new ArrayList<>(this.houses);
+            this.communicationWithOldCoordinator = true;
+        }
+
+        oldHouses.remove(HouseMain.getHouseInfo());
+        oldHouses.sort(Comparator.comparingInt(HouseInfoMsg::getId));
+        return oldHouses.get(0);
     }
 }
