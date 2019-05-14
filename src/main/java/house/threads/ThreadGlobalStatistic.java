@@ -12,7 +12,7 @@ public class ThreadGlobalStatistic extends Thread {
         while(true){
             List<StatisticMsg> statistics = HousesAndStatistics.getInstance().getAllStatistics();
             StatisticMsg globalStatistic = StatisticMsg.newBuilder()
-                    .setValue(statistics.stream().mapToDouble(statistic -> statistic.getValue()).sum() / statistics.size())
+                    .setValue(statistics.stream().mapToDouble(statistic -> statistic.getValue()).sum())
                     .setTimestamp(statistics.stream().mapToLong(statistic -> statistic.getTimestamp()).max().getAsLong())
                     .build();
 
