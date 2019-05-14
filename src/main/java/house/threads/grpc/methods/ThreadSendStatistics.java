@@ -8,7 +8,7 @@ import messages.HouseMsgs.HouseInfoMsg;
 import messages.StatisticMsgs;
 import messages.StatisticMsgs.StatisticMsg;
 import messages.StatisticMsgs.StatisticHouseMsg;
-import utility.HousesAndStatistics;
+import house.HousesAndStatistics;
 
 
 public class ThreadSendStatistics extends ThreadStreamGrpc {

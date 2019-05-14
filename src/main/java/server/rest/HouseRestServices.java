@@ -6,7 +6,7 @@ import server.aspects.annotations.ProtoInput;
 import server.aspects.annotations.Notification;
 import messages.HouseMsgs.HouseInfoListMsg;
 import messages.HouseMsgs.HouseInfoMsg;
-import utility.Houses;
+import server.Houses;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

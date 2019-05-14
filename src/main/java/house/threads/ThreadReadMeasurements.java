@@ -7,7 +7,7 @@ import house.threads.grpc.methods.ThreadSendStatistics;
 import messages.StatisticMsgs;
 import messages.StatisticMsgs.StatisticMsg;
 import server.ServerMain;
-import utility.HousesAndStatistics;
+import house.HousesAndStatistics;
 
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Client;

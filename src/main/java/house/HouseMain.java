@@ -11,7 +11,6 @@ import io.grpc.ServerBuilder;
 import messages.HouseMsgs.HouseInfoListMsg;
 import messages.HouseMsgs.HouseInfoMsg;
 import server.ServerMain;
-import utility.HousesAndStatistics;
 
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Client;

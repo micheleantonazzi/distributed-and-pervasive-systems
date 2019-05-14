@@ -1,4 +1,4 @@
-package utility;
+package server;
 
 import messages.HouseMsgs.*;
 import messages.StatisticMsgs.StatisticMsg;

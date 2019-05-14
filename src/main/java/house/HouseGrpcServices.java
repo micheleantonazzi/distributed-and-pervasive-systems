@@ -5,7 +5,6 @@ import house.services.HouseServicesOuterClass.Response;
 import io.grpc.stub.StreamObserver;
 import messages.HouseMsgs.HouseInfoMsg;
 import messages.StatisticMsgs.StatisticHouseMsg;
-import utility.HousesAndStatistics;
 
 public class HouseGrpcServices extends HouseServicesImplBase {
 

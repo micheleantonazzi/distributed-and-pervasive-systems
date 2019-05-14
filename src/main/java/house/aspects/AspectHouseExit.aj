@@ -1,7 +1,7 @@
 package house.aspects;
 
 import house.threads.grpc.ThreadGrpc;
-import utility.HousesAndStatistics;
+import house.HousesAndStatistics;
 
 public aspect AspectHouseExit {
 

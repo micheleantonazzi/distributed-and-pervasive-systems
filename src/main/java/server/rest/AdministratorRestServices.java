@@ -11,7 +11,7 @@ import server.aspects.annotations.ProtoInput;
 import messages.AdministratorInfoMsgOuterClass.AdministratorInfoMsg;
 import messages.HouseMsgs.HouseInfoListMsg;
 import server.Administrators;
-import utility.Houses;
+import server.Houses;
 
 
 import java.io.IOException;

@@ -1,7 +1,7 @@
 package house.threads;
 
 import messages.StatisticMsgs.StatisticMsg;
-import utility.HousesAndStatistics;
+import house.HousesAndStatistics;
 
 import java.util.List;
 
