@@ -1,13 +1,22 @@
 package house.threads;
 
+import messages.StatisticMsgs.StatisticMsg;
 import utility.HousesAndStatistics;
+
+import java.util.List;
 
 public class ThreadGlobalStatistic extends Thread {
 
     @Override
     public void run(){
         while(true){
-            System.out.println("Calcolo la statistica con " + HousesAndStatistics.getInstance().getAllStatistics().size());
+            List<StatisticMsg> statistics = HousesAndStatistics.getInstance().getAllStatistics();
+            StatisticMsg globalStatistic = StatisticMsg.newBuilder()
+                    .setValue(statistics.stream().mapToDouble(statistic -> statistic.getValue()).sum() / statistics.size())
+                    .setTimestamp(statistics.stream().mapToLong(statistic -> statistic.getTimestamp()).max().getAsLong())
+                    .build();
+
+            System.out.println("Global Statistic of " + statistics.size() + " houses:\n" + globalStatistic);
         }
     }
 

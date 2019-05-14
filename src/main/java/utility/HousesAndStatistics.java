@@ -154,6 +154,10 @@ public class HousesAndStatistics {
         }
 
         return allStatistics.stream().map((statistics)->{
+
+            if (statistics.size() == 1)
+                return statistics.get(0);
+
             long timestamp = statistics.get(statistics.size() - 1).getTimestamp();
             int size = statistics.size();
             return StatisticMsg.newBuilder()

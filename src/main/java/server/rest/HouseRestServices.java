@@ -84,8 +84,8 @@ public class HouseRestServices {
     @DELETE
     @Path("unexpectedexit/{id}")
     @Consumes(MediaType.APPLICATION_OCTET_STREAM)
-    @Notification(text = "A house leaves the network.")
-    public Response unexpectedExit(@PathParam("id") int id){
+    @Notification(text = "A house leaves unexpectedly the network.")
+    public Response unexpectedlyExit(@PathParam("id") int id){
         if(!Houses.getInstance().remove(id))
             //422 = Unprocessable Entity
             return Response.status(422).build();

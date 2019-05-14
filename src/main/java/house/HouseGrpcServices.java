@@ -39,7 +39,7 @@ public class HouseGrpcServices extends HouseServicesImplBase {
             public void onNext(StatisticHouseMsg statisticHouseMsg) {
 
                 HousesAndStatistics.getInstance().addStatistic(statisticHouseMsg.getHouseInfo(), statisticHouseMsg.getStatistic());
-                System.out.println("Statistica ricevuta dalla casa " + statisticHouseMsg.getHouseInfo().getId());
+                //System.out.println("Statistica ricevuta dalla casa " + statisticHouseMsg.getHouseInfo().getId());
             }
 
             @Override
