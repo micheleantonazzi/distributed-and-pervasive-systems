@@ -21,6 +21,7 @@ public class ThreadGlobalStatistic extends Thread {
 
             if(Coordinator.getInstance().isCoordinator()){
                 System.out.println("I'm the coordinator and send global statistic");
+
             }
         }
     }

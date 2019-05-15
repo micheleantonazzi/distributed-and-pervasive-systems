@@ -35,26 +35,13 @@ public class ThreadReadMeasurements extends Thread{
             HousesAndStatistics.getInstance().addStatistic(HouseMain.getHouseInfo(), statistic);
 
             // Send asynchronously statistic to server
-            new Thread(()->{
-                try{
-                    target.path("house/sendstatistic").request().post(
-                            Entity.entity(
-                                    StatisticMsgs.StatisticHouseMsg.newBuilder()
-                                            .setHouseInfo(HouseMain.getHouseInfo())
-                                            .setStatistic(statistic).build().toByteArray(),
-                                    MediaType.APPLICATION_OCTET_STREAM));
-                }
-                catch (ProcessingException ex){
-                    Throwable cause = ex.getCause();
-                    System.out.println(ex);
-                    System.out.println(cause);
-                    if (cause.getClass().getName().equals("java.net.ConnectException"))
-                        //if the connection doesn't exist maybe the server isn't running
-                        System.out.println("ERROR, the server couldn't be contacted, please check if it running.");
-                    else
-                        System.out.println(ex);
-                }
-            }).start();
+            new Thread(
+                    new RunnableSendStatistic(
+                            StatisticMsgs.StatisticHouseMsg.newBuilder()
+                            .setHouseInfo(HouseMain.getHouseInfo())
+                            .setStatistic(statistic).build(), target
+                    )
+            ).start();
 
             // Send statistic to other houses
             for(ThreadSendStatistics thread : HousesAndStatistics.getInstance().getThreadsSendStatistics())

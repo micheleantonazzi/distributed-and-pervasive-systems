@@ -62,13 +62,32 @@ public class HouseRestServices {
         }
         HouseInfoMsg house = statisticHouseMsg.getHouseInfo();
         StatisticMsg statistic = statisticHouseMsg.getStatistic();
-        System.out.println(house + " -> " + statistic);
 
         if(!Houses.getInstance().addStatistic(house, statistic))
             return Response.status(400).build();
 
         return Response.ok().build();
     }
+
+    @POST
+    @Path("sendglobalstatistic")
+    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
+    @ProtoInput(proto = StatisticMsg.class)
+    public Response sendGlobalStatistic(InputStream inputStream){
+        StatisticMsg statistic;
+
+        try {
+            statistic = StatisticMsg.parseFrom(inputStream);
+        } catch (IOException ex) {
+            System.out.println(ex);
+            return Response.status(400).build();
+        }
+
+        System.out.println(statistic);
+
+        return Response.ok().build();
+    }
+
 
     @DELETE
     @Path("leave/{id}")
