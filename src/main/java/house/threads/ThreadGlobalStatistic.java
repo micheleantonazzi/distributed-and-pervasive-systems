@@ -1,5 +1,6 @@
 package house.threads;
 
+import house.Coordinator;
 import messages.StatisticMsgs.StatisticMsg;
 import house.HousesAndStatistics;
 
@@ -17,6 +18,10 @@ public class ThreadGlobalStatistic extends Thread {
                     .build();
 
             System.out.println("Global Statistic of " + statistics.size() + " houses:\n" + globalStatistic);
+
+            if(Coordinator.getInstance().isCoordinator()){
+                System.out.println("I'm the coordinator and send global statistic");
+            }
         }
     }
 

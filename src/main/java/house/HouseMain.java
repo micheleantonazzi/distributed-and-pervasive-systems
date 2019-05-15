@@ -83,6 +83,7 @@ public class HouseMain {
             List<HouseInfoMsg> houses = HouseInfoListMsg.parseFrom(response.readEntity(InputStream.class)).getHouseList();
 
             HousesAndStatistics.getInstance().setHouses(houses);
+            Coordinator.getInstance().setHouses(houses);
             HousesAndStatistics.getInstance().addHouse(HOUSE_INFO);
 
             //Say hello to other houses
