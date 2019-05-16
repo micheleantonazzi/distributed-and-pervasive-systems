@@ -2,6 +2,7 @@ package server.rest;
 
 import messages.StatisticMsgs.StatisticMsg;
 import messages.StatisticMsgs.StatisticHouseMsg;
+import server.GlobalStatistics;
 import server.aspects.annotations.ProtoInput;
 import server.aspects.annotations.Notification;
 import messages.HouseMsgs.HouseInfoListMsg;
@@ -83,7 +84,7 @@ public class HouseRestServices {
             return Response.status(400).build();
         }
 
-        System.out.println(statistic);
+        GlobalStatistics.getInstance().add(statistic);
 
         return Response.ok().build();
     }

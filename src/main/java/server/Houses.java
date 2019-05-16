@@ -74,6 +74,8 @@ public class Houses {
     public List<StatisticMsg> getStatistics(int id, int number){
         List<StatisticMsg> statistics = null;
         ArrayList<StatisticMsg> oldStatistics = new ArrayList<>();
+
+        // To remember the position of the current last statistic
         int limit = 0;
 
         synchronized (this){
@@ -90,10 +92,9 @@ public class Houses {
         }
 
         if(statistics != null){
-            for(int i = limit; i >= 0 && i > limit - number;--i)
+            for(int i = limit; i >= 0 && i > limit - number; --i)
                 statistics.add(oldStatistics.get(i));
         }
-        System.out.println(statistics);
 
         return statistics;
     }
