@@ -3,10 +3,17 @@ package house.threads;
 import house.Coordinator;
 import messages.StatisticMsgs.StatisticMsg;
 import house.HousesAndStatistics;
+import server.ServerMain;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
 import java.util.List;
 
 public class ThreadGlobalStatistic extends Thread {
+
+    Client client = ClientBuilder.newClient();
+    WebTarget target = client.target(ServerMain.SERVER_URI);
 
     @Override
     public void run(){
@@ -21,10 +28,13 @@ public class ThreadGlobalStatistic extends Thread {
 
             if(Coordinator.getInstance().isCoordinator()){
                 System.out.println("I'm the coordinator and send global statistic");
-
+                new Thread(new RunnableSendGlobalStatistic(globalStatistic, target)).start();
             }
         }
     }
 
-
+    public void stopAndClose(){
+        this.client.close();
+        this.stop();
+    }
 }
