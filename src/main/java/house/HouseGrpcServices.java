@@ -33,11 +33,7 @@ public class HouseGrpcServices extends HouseServicesImplBase {
 
     @Override
     public void stopCoordinate(Empty e, StreamObserver<Response> responseObserver){
-        System.out.println("statrt stop");
-
         Coordinator.getInstance().notCoordinator();
-
-        System.out.println("stop stop");
 
         responseObserver.onNext(Response.newBuilder().setStatus(Response.Status.OK).build());
 
@@ -50,9 +46,7 @@ public class HouseGrpcServices extends HouseServicesImplBase {
         return new StreamObserver<StatisticHouseMsg>() {
             @Override
             public void onNext(StatisticHouseMsg statisticHouseMsg) {
-
                 HousesAndStatistics.getInstance().addStatistic(statisticHouseMsg.getHouseInfo(), statisticHouseMsg.getStatistic());
-                //System.out.println("Statistica ricevuta dalla casa " + statisticHouseMsg.getHouseInfo().getId());
             }
 
             @Override

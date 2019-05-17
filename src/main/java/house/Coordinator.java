@@ -126,8 +126,9 @@ public class Coordinator {
                 // This code ensures that there isn't possible to have two coordinator
                 if(this.houses.size() > 0){
                     this.houses.sort(Comparator.comparingInt(HouseInfoMsg::getId));
+
+                    // This is the possible old coordinator
                     HouseInfoMsg oldCoordinator = this.houses.get(this.houses.size() - 1);
-                    System.out.println("vecchio " + oldCoordinator);
                     ManagedChannel channel = ManagedChannelBuilder.forAddress(
                             oldCoordinator.getAddress(), oldCoordinator.getPort()
                     ).usePlaintext(true).build();
