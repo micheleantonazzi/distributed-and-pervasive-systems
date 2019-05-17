@@ -42,7 +42,6 @@ public class Coordinator {
 
     public synchronized void setHouses(List<HouseInfoMsg> houses){
         this.houses = new ArrayList<>(houses);
-        //this.becomeCoordinator();
     }
 
     public synchronized boolean isCoordinator(){
@@ -61,7 +60,6 @@ public class Coordinator {
     private synchronized void notCoordinator(){
         this.isCoordinator = false;
         this.communicationWithOldCoordinator = false;
-        System.out.println("not coordinator");
     }
 
     // Not synchronized because is used by a single thread

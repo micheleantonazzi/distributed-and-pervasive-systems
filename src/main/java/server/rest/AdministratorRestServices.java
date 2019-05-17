@@ -108,6 +108,7 @@ public class AdministratorRestServices {
 
         return Response.ok(
                 StatisticListMsg.newBuilder().addAllStatistic(GlobalStatistics.getInstance().getLasts(number))
+                        .build().toByteArray()
         ).build();
     }
 }
