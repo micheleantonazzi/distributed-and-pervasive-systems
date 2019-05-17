@@ -81,7 +81,6 @@ public class Coordinator {
         notify();
     }
 
-    // Not synchronized because is used by a single thread
     private void canBecomeCoordinator(){
 
         // if another thread is running stop and reinitialize it
