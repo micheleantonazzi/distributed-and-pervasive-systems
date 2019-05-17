@@ -1,5 +1,10 @@
 package house;
 
+import house.services.HouseServicesGrpc;
+import house.services.HouseServicesGrpc.HouseServicesBlockingStub;
+import house.services.HouseServicesOuterClass.Empty;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 import messages.HouseMsgs.HouseInfoMsg;
 
 import java.util.*;
@@ -48,7 +53,16 @@ public class Coordinator {
         return this.isCoordinator;
     }
 
-
+    public synchronized void notCoordinator(){
+        while (this.communicationWithOldCoordinator) {
+            try {
+                wait();
+            } catch (InterruptedException ex) {
+                System.out.println(ex);
+            }
+        }
+        this.isCoordinator = false;
+    }
 
     // Private methods, used only by the inner thread
 
@@ -57,14 +71,14 @@ public class Coordinator {
         this.communicationWithOldCoordinator = false;
     }
 
-    private synchronized void notCoordinator(){
-        this.isCoordinator = false;
-        this.communicationWithOldCoordinator = false;
-    }
-
-    // Not synchronized because is used by a single thread
     private synchronized void startCommunication(){
         this.communicationWithOldCoordinator = true;
+    }
+
+    private synchronized void stopCommunication(){
+        this.communicationWithOldCoordinator = false;
+
+        notify();
     }
 
     // Not synchronized because is used by a single thread
@@ -108,14 +122,27 @@ public class Coordinator {
         public void run(){
             // I can become the coordinator
             if(this.highest()){
+
+                // This code ensures that there isn't possible to have two coordinator
                 if(this.houses.size() > 0){
                     this.houses.sort(Comparator.comparingInt(HouseInfoMsg::getId));
                     HouseInfoMsg oldCoordinator = this.houses.get(this.houses.size() - 1);
+                    System.out.println("vecchio " + oldCoordinator);
+                    ManagedChannel channel = ManagedChannelBuilder.forAddress(
+                            oldCoordinator.getAddress(), oldCoordinator.getPort()
+                    ).usePlaintext(true).build();
+
+                    HouseServicesBlockingStub stub = HouseServicesGrpc.newBlockingStub(channel);
 
                     Coordinator.getInstance().startCommunication();
+
                     // Communication with to old coordinator
+                    stub.stopCoordinate(Empty.newBuilder().build());
+
+                    Coordinator.getInstance().stopCommunication();
 
                 }
+
                 Coordinator.getInstance().becomeCoordinator();
             }
             else

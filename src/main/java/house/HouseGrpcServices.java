@@ -1,6 +1,7 @@
 package house;
 
 import house.services.HouseServicesGrpc.HouseServicesImplBase;
+import house.services.HouseServicesOuterClass.Empty;
 import house.services.HouseServicesOuterClass.Response;
 import io.grpc.stub.StreamObserver;
 import messages.HouseMsgs.HouseInfoMsg;
@@ -31,6 +32,19 @@ public class HouseGrpcServices extends HouseServicesImplBase {
     }
 
     @Override
+    public void stopCoordinate(Empty e, StreamObserver<Response> responseObserver){
+        System.out.println("statrt stop");
+
+        Coordinator.getInstance().notCoordinator();
+
+        System.out.println("stop stop");
+
+        responseObserver.onNext(Response.newBuilder().setStatus(Response.Status.OK).build());
+
+        responseObserver.onCompleted();
+    }
+
+    @Override
     public StreamObserver<StatisticHouseMsg> sendStatistic(final StreamObserver<Response> responseObserver){
 
         return new StreamObserver<StatisticHouseMsg>() {
@@ -43,8 +57,7 @@ public class HouseGrpcServices extends HouseServicesImplBase {
 
             @Override
             public void onError(Throwable throwable) {
-                for (StackTraceElement t : throwable.getStackTrace())
-                    System.out.println(t);
+                System.out.println(throwable);
             }
 
             @Override

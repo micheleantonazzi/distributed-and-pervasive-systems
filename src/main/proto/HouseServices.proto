@@ -4,6 +4,8 @@ package house.services;
 import public "HouseMsgs.proto";
 import public "StatisticMsgs.proto";
 
+message Empty{}
+
 message Response{
     enum Status{
         OK = 0;
@@ -20,5 +22,7 @@ service HouseServices {
     rpc goodbye(messages.HouseInfoMsg) returns (Response);
 
     rpc sendStatistic(stream messages.StatisticHouseMsg) returns (Response);
+
+    rpc stopCoordinate(Empty) returns (Response);
 
 }
