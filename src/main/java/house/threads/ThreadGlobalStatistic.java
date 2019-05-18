@@ -28,9 +28,11 @@ public class ThreadGlobalStatistic extends Thread {
                     globalStatistic.getTimestamp() + " -> " + globalStatistic.getValue());
 
             if(Coordinator.getInstance().isCoordinator()){
-                System.out.println("I'm the coordinator and send global statistic");
+                System.out.println("I'm the coordinator and send global statistic\n");
                 new Thread(new RunnableSendGlobalStatistic(globalStatistic, target)).start();
             }
+            else
+                System.out.println();
         }
     }
 

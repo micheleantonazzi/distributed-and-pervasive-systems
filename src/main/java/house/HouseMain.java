@@ -79,7 +79,6 @@ public class HouseMain {
                     System.out.println("Port " + PORT + " is already used.\nRetry.");
                     PORT++;
                 }
-
             }
             while (!retry);
 

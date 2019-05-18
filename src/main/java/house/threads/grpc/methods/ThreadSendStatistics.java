@@ -34,7 +34,7 @@ public class ThreadSendStatistics extends ThreadStreamGrpc {
 
             @Override
             public void onError(Throwable throwable) {
-                System.out.println("House " + destinationHouse.getId() + " is unexpectedly disconnected");
+                System.out.println("House " + destinationHouse.getId() + " is unexpectedly disconnected\n");
 
                 // Delete house localy
                 HousesAndStatistics.getInstance().removeHouse(destinationHouse);

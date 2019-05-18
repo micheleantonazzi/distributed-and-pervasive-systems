@@ -121,7 +121,7 @@ public class BoostCoordinator {
 
         this.status = Status.BOOST;
 
-        System.out.println("BOOST");
+        System.out.println("BOOST\n");
 
 
         // BOOST
@@ -137,7 +137,7 @@ public class BoostCoordinator {
     }
 
     private synchronized void stopBoost(){
-        System.out.println("BOOST END");
+        System.out.println("BOOST END\n");
 
         this.status = Status.FREE;
 

@@ -24,7 +24,7 @@ public aspect AspectHouseExit {
 
                 //The house isn't online
                 if(cause instanceof java.net.ConnectException){
-                    System.out.println("House " + threadGrpc.getDestinationHouse().getId() + " is unexpectedly disconnected.");
+                    System.out.println("House " + threadGrpc.getDestinationHouse().getId() + " is unexpectedly disconnected.\n");
 
                     //Remove house locally
                     HousesAndStatistics.getInstance().removeHouse(threadGrpc.getDestinationHouse());
