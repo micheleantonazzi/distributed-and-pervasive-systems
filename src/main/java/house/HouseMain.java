@@ -54,31 +54,36 @@ public class HouseMain {
         try{
             boolean retry = false;
 
+            Response response = Response.ok().build();
+            ID = 1;
 
             do{
                 try {
                     server = ServerBuilder.forPort(PORT).addService(new HouseGrpcServices()).build();
                     server.start();
                     retry = true;
+
+                    HOUSE_INFO = HouseInfoMsg.newBuilder().setId(ID).setAddress(ADDRESS).setPort(PORT).build();
+
+                    response = target.path("house/enter").request().post(
+                            Entity.entity(HOUSE_INFO.toByteArray(),
+                                    MediaType.APPLICATION_OCTET_STREAM));
+                    if(response.getStatus() != 200){
+                        server.shutdown();
+                        retry = false;
+                        ID++;
+                    }
                 }
                 catch (IOException ex){
                     //In this case the server failed because the port is already used
                     System.out.println("Port " + PORT + " is already used.\nRetry.");
-                    PORT += 1;
+                    PORT++;
                 }
 
             }
             while (!retry);
 
-            ID = (ADDRESS + PORT + Math.random()).hashCode();
-
             System.out.println("House with id " + ID + " is running at port " + PORT);
-
-            HOUSE_INFO = HouseInfoMsg.newBuilder().setId(ID).setAddress(ADDRESS).setPort(PORT).build();
-
-            Response response = target.path("house/enter").request().post(
-                    Entity.entity(HOUSE_INFO.toByteArray(),
-                            MediaType.APPLICATION_OCTET_STREAM));
 
             List<HouseInfoMsg> houses = HouseInfoListMsg.parseFrom(response.readEntity(InputStream.class)).getHouseList();
 
