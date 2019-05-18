@@ -24,7 +24,7 @@ public class SmartMeterSimulator extends Simulator {
 
         while(!stopCondition){
 
-            double value = getElecticityValue(i);
+            double value = getElectricityValue(i);
 
             if(boost) {
 
@@ -42,7 +42,7 @@ public class SmartMeterSimulator extends Simulator {
         }
     }
 
-    private double getElecticityValue(double t){
+    private double getElectricityValue(double t){
         return Math.abs(A * Math.sin(W*t) + rnd.nextGaussian()*0.3);
     }
 
