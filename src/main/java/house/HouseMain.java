@@ -104,7 +104,7 @@ public class HouseMain {
             while(!input.equals("x")) {
                 System.out.println("Type:\n" +
                         "\t- 0 to get houses list\n" +
-                        "\t- 1 ask boost\n" +
+                        "\t- 1 to ask boost\n" +
                         "\t- x to close the application");
                 input = reader.readLine();
                 if (input.equals("0")) {
