@@ -104,10 +104,14 @@ public class HouseMain {
             while(!input.equals("x")) {
                 System.out.println("Type:\n" +
                         "\t- 0 to get houses list\n" +
+                        "\t- 1 ask boost\n" +
                         "\t- x to close the application");
                 input = reader.readLine();
                 if (input.equals("0")) {
                     System.out.println(HousesAndStatistics.getInstance().getOtherHouses());
+                }
+                else if(input.equals("1")){
+                    BoostCoordinator.getInstance().tryAcquireBoost();
                 }
             }
         }
@@ -129,6 +133,7 @@ public class HouseMain {
             THREAD_SMART_METER.stopMeGently();
             THREAD_READ_MEASUREMENTS.stopAndClose();
             THREAD_GLOBAL_STATISTIC.stopAndClose();
+            BoostCoordinator.getInstance().stopAndClose();
 
             // Stop all threads that send statistic
             HousesAndStatistics.getInstance().stopAll();
@@ -149,5 +154,9 @@ public class HouseMain {
         synchronized (HOUSE_INFO){
             return HOUSE_INFO;
         }
+    }
+
+    public static SmartMeterSimulator getSmartMeter(){
+        return THREAD_SMART_METER;
     }
 }

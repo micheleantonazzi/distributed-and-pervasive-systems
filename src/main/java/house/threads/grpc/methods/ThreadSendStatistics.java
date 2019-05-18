@@ -5,7 +5,6 @@ import house.services.HouseServicesOuterClass.Response;
 import house.threads.grpc.ThreadStreamGrpc;
 import io.grpc.stub.StreamObserver;
 import messages.HouseMsgs.HouseInfoMsg;
-import messages.StatisticMsgs;
 import messages.StatisticMsgs.StatisticMsg;
 import messages.StatisticMsgs.StatisticHouseMsg;
 import house.HousesAndStatistics;
@@ -17,7 +16,7 @@ public class ThreadSendStatistics extends ThreadStreamGrpc {
 
     private Object lock = new Object();
 
-    private StreamObserver<StatisticMsgs.StatisticHouseMsg> sendStream;
+    private StreamObserver<StatisticHouseMsg> sendStream;
 
     public ThreadSendStatistics(HouseInfoMsg destinationHouse){
         super(destinationHouse);
@@ -35,7 +34,6 @@ public class ThreadSendStatistics extends ThreadStreamGrpc {
 
             @Override
             public void onCompleted() {
-                System.out.println("completed");
             }
         });
     }

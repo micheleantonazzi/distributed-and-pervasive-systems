@@ -9,7 +9,9 @@ message Empty{}
 message Response{
     enum Status{
         OK = 0;
-        ERROR = 1;
+        WAIT = 1;
+        BOOST = 3;
+        ERROR = 4;
     }
 
     Status status = 1;
@@ -24,5 +26,7 @@ service HouseServices {
     rpc sendStatistic(stream messages.StatisticHouseMsg) returns (Response);
 
     rpc stopCoordinate(Empty) returns (Response);
+
+    rpc acquireBoost(messages.HouseInfoMsg) returns (stream Response);
 
 }

@@ -15,6 +15,6 @@ public class ThreadSayHello extends ThreadUnaryGrpc {
     @Override
     public void run() {
         super.getStub().hello(thisHouse);
-        //super.getChannel().shutdown();
+        super.getChannel().shutdown();
     }
 }

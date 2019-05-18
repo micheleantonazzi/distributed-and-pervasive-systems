@@ -24,7 +24,8 @@ public class ThreadGlobalStatistic extends Thread {
                     .setTimestamp(statistics.stream().mapToLong(statistic -> statistic.getTimestamp()).max().getAsLong())
                     .build();
 
-            System.out.println("Global Statistic of " + statistics.size() + " houses:\n" + globalStatistic);
+            System.out.println("Global Statistic of " + statistics.size() + " houses:\n" +
+                    globalStatistic.getTimestamp() + " -> " + globalStatistic.getValue());
 
             if(Coordinator.getInstance().isCoordinator()){
                 System.out.println("I'm the coordinator and send global statistic");

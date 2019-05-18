@@ -49,7 +49,7 @@ public class SmartMeterSimulator extends Simulator {
     public void boost() throws InterruptedException {
         boost = true;
 
-        Thread.sleep(5000);
+        Thread.sleep(12000);
 
         boost = false;
     }

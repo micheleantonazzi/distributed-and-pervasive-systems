@@ -34,8 +34,8 @@ public class BufferSynchronized implements Buffer {
             if(this.queue.size() < 24) {
                 try {
                     wait();
-                } catch (InterruptedException e) {
-                    System.out.println(e);
+                } catch (InterruptedException ex) {
+                    System.out.println(ex);
                     return new ArrayList<>();
                 }
             }

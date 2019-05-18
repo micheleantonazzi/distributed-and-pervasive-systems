@@ -5,6 +5,7 @@ import house.services.HouseServicesGrpc.HouseServicesBlockingStub;
 import house.services.HouseServicesOuterClass.Empty;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.StatusRuntimeException;
 import messages.HouseMsgs.HouseInfoMsg;
 
 import java.util.*;
@@ -137,10 +138,12 @@ public class Coordinator {
                     Coordinator.getInstance().startCommunication();
 
                     // Communication with to old coordinator
-                    stub.stopCoordinate(Empty.newBuilder().build());
+                    try{
+                        stub.stopCoordinate(Empty.newBuilder().build());
+                    }
+                    catch (StatusRuntimeException ex){}
 
                     Coordinator.getInstance().stopCommunication();
-
                 }
 
                 Coordinator.getInstance().becomeCoordinator();

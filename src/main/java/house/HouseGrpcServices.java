@@ -56,10 +56,15 @@ public class HouseGrpcServices extends HouseServicesImplBase {
 
             @Override
             public void onCompleted() {
-                System.out.println("Casa uscita correttamente");
+                System.out.println("House exit correctly");
                 responseObserver.onNext(Response.newBuilder().setStatus(Response.Status.OK).build());
                 responseObserver.onCompleted();
             }
         };
+    }
+
+    @Override
+    public void acquireBoost(HouseInfoMsg house, StreamObserver<Response> streamObserver){
+        BoostCoordinator.getInstance().request(house, streamObserver);
     }
 }
