@@ -8,6 +8,12 @@ import messages.HouseMsgs.HouseInfoMsg;
 import messages.StatisticMsgs.StatisticMsg;
 import messages.StatisticMsgs.StatisticHouseMsg;
 import house.HousesAndStatistics;
+import server.ServerMain;
+
+import javax.ws.rs.ProcessingException;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
 
 
 public class ThreadSendStatistics extends ThreadStreamGrpc {
@@ -29,7 +35,26 @@ public class ThreadSendStatistics extends ThreadStreamGrpc {
             @Override
             public void onError(Throwable throwable) {
                 System.out.println("House " + destinationHouse.getId() + " is unexpectedly disconnected");
+
+                // Delete house localy
                 HousesAndStatistics.getInstance().removeHouse(destinationHouse);
+
+                // Delete house remotely
+                Client client = ClientBuilder.newClient();
+                WebTarget target = client.target(ServerMain.SERVER_URI);
+                try{
+                    target.path("house/unexpectedexit/" + destinationHouse.getId())
+                            .request().delete();
+                }
+                catch (ProcessingException e){
+                    if(e.getClass().getName().equals("java.net.ConnectException"))
+                        System.out.println("ERROR, the server couldn't be contacted, please check if it running.");
+                    else
+                        System.out.println(e);
+                }
+                finally {
+                    client.close();
+                }
             }
 
             @Override
