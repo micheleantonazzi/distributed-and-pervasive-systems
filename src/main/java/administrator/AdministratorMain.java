@@ -68,6 +68,7 @@ public class AdministratorMain {
                             "\t- 1 to get the latest N statistics of a home\n" +
                             "\t- 2 to get average and standard deviation of latest N statistics of a home\n" +
                             "\t- 3 to get the latest N global statistics\n" +
+                            "\t- 4 to get average and standard deviation of latest N global statistics\n" +
                             "\t- x to close the application");
                     input = reader.readLine();
                     if (input.equals("0")){
@@ -124,6 +125,20 @@ public class AdministratorMain {
                                         statistic.getValue());
                             }
 
+                        }
+                    }
+                    else if(input.equals("4")){
+                        System.out.println("Insert number of statistics");
+                        String number = reader.readLine();
+                        response = target.path("administrator/averagedeviationglobal/" + number).request().get();
+                        if(response.getStatus() != 200)
+                            System.out.println("Request failed, response status: " + response.getStatus());
+                        else {
+                            StatisticsAverageAndDeviationMsg statistic = StatisticsAverageAndDeviationMsg.parseFrom(
+                                    response.readEntity(InputStream.class)
+                            );
+                            System.out.println("Average:  " + statistic.getAverage() +  "\n" +
+                                    "Standard deviation: " + statistic.getDeviation());
                         }
                     }
 

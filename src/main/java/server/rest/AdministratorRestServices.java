@@ -111,5 +111,22 @@ public class AdministratorRestServices {
                         .build().toByteArray()
         ).build();
     }
+
+    @GET
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    @Path("averagedeviationglobal/{number}")
+    public Response getAverageAndDeviationGlobal(@PathParam("number") int number){
+
+        if (number < 1)
+            return Response.status(400).build();
+
+        Pair<Double, Double> ret = GlobalStatistics.getInstance().getAverageAndDeviation(number);
+
+        return Response.ok(
+                StatisticsAverageAndDeviationMsg
+                        .newBuilder().setAverage(ret.getValue0()).setDeviation(ret.getValue1())
+                        .build().toByteArray()
+        ).build();
+    }
 }
 

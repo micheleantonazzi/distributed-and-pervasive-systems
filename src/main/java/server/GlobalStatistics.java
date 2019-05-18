@@ -1,6 +1,7 @@
 package server;
 
 import messages.StatisticMsgs.StatisticMsg;
+import org.javatuples.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,5 +41,18 @@ public class GlobalStatistics {
             ret.add(this.statistics.get(i));
 
         return ret;
+    }
+
+    public Pair<Double, Double> getAverageAndDeviation(int number){
+        List<StatisticMsg> statistics = this.getLasts(number);
+
+        if(statistics.size() == 0)
+            return Pair.with(0.0, 0.0);
+
+        Double average = statistics.stream().mapToDouble((statistic) -> statistic.getValue()).sum() / statistics.size();
+
+        Double deviation = Math.sqrt((1.0 / statistics.size()) * statistics.stream().mapToDouble((statistic) -> Math.pow(statistic.getValue() - average, 2)).sum());
+
+        return Pair.with(average, deviation);
     }
 }
