@@ -1,6 +1,6 @@
-package aspects;
+package server.aspects;
 
-import aspects.annotations.ProtoInput;
+import server.aspects.annotations.ProtoInput;
 import com.google.protobuf.GeneratedMessageV3.Builder;
 import com.google.protobuf.Message;
 import com.google.protobuf.Parser;
@@ -15,7 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 public aspect CheckInputREST {
 
     private pointcut checkProto(InputStream inputStream, ProtoInput protoInput):
-            execution(* *..*.*(..)) && !within(aspects.CheckInputREST) && args(inputStream)
+            execution(* *..*.*(..)) && !within(server.aspects.CheckInputREST) && args(inputStream)
             && @annotation(protoInput);
 
     Response around(InputStream inputStream, ProtoInput protoInput): checkProto(inputStream, protoInput){

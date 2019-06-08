@@ -1,0 +1,32 @@
+syntax = "proto3";
+package house.services;
+
+import public "HouseMsgs.proto";
+import public "StatisticMsgs.proto";
+
+message Empty{}
+
+message Response{
+    enum Status{
+        OK = 0;
+        WAIT = 1;
+        BOOST = 3;
+        ERROR = 4;
+    }
+
+    Status status = 1;
+}
+
+service HouseServices {
+
+    rpc hello(messages.HouseInfoMsg) returns (Response);
+
+    rpc goodbye(messages.HouseInfoMsg) returns (Response);
+
+    rpc sendStatistic(stream messages.StatisticHouseMsg) returns (Response);
+
+    rpc stopCoordinate(Empty) returns (Response);
+
+    rpc acquireBoost(messages.HouseInfoMsg) returns (stream Response);
+
+}

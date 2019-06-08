@@ -1,4 +1,4 @@
-package aspects.annotations;
+package server.aspects.annotations;
 
 import com.google.protobuf.GeneratedMessageV3;
 import java.lang.annotation.ElementType;

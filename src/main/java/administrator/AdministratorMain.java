@@ -1,8 +1,11 @@
 package administrator;
 
 import messages.AdministratorInfoMsgOuterClass.AdministratorInfoMsg;
-import messages.HouseInfoMsgOuterClass.HouseInfoMsg;
-import messages.HouseInfoMsgOuterClass.HouseInfoListMsg;
+import messages.HouseMsgs.HouseInfoMsg;
+import messages.HouseMsgs.HouseInfoListMsg;
+import messages.StatisticMsgs.StatisticsAverageAndDeviationMsg;
+import messages.StatisticMsgs.StatisticMsg;
+import messages.StatisticMsgs.StatisticListMsg;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -15,8 +18,10 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 
 
@@ -31,9 +36,6 @@ public class AdministratorMain {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(ServerMain.SERVER_URI);
         HttpServer server = null;
-
-        /*Response house = target.path("helloworld/hello").request().get();
-        System.out.println(House.parseFrom(house.readEntity(InputStream.class)));*/
 
         //the cycle serves to find a free door if the initial one in occupied
         boolean retry;
@@ -56,25 +58,90 @@ public class AdministratorMain {
 
                 System.out.println(String.format("Client running at " + CLIENT_URI + "\n"));
 
-                char input = ' ';
-                while(input != 'x'){
+                //buffered reader to read from standard input
+                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+                String input = " ";
+                while(!input.equals("x")){
                     System.out.println("Type:\n" +
                             "\t- 0 to get houses list\n" +
+                            "\t- 1 to get the latest N statistics of a home\n" +
+                            "\t- 2 to get average and standard deviation of latest N statistics of a home\n" +
+                            "\t- 3 to get the latest N global statistics\n" +
+                            "\t- 4 to get average and standard deviation of latest N global statistics\n" +
                             "\t- x to close the application");
-                    input = (char) System.in.read();
-                    System.in.skip(1);
-                    switch (input){
-                        case '0':
-                            response = target.path("administrator/houses").request().get();
-                            if(response.getStatus() != 200)
-                                System.out.println("Request failed, response status: " + response.getStatus());
-                            else{
-                                HouseInfoListMsg houses = HouseInfoListMsg.parseFrom(response.readEntity(InputStream.class));
-                                for(HouseInfoMsg house : houses.getHouseList())
-                                    System.out.println("- House: id = " + house.getId());
-                            }
-                            break;
+                    input = reader.readLine();
+                    if (input.equals("0")){
+                        response = target.path("administrator/houses").request().get();
+                        if(response.getStatus() != 200)
+                            System.out.println("Request failed, response status: " + response.getStatus());
+                        else{
+                            HouseInfoListMsg houses = HouseInfoListMsg.parseFrom(response.readEntity(InputStream.class));
+                            for(HouseInfoMsg house : houses.getHouseList())
+                                System.out.println("- House: id = " + house.getId());
+                        }
                     }
+                    else if(input.equals("1")){
+                        System.out.println("Insert house id");
+                        String houseId = reader.readLine();
+                        System.out.println("Insert number of statistics");
+                        String number = reader.readLine();
+                        response = target.path("administrator/statistics/" + houseId + "/" + number).request().get();
+                        if(response.getStatus() != 200)
+                            System.out.println("Request failed, response status: " + response.getStatus());
+                        else{
+                            StatisticListMsg statistics = StatisticListMsg.parseFrom(response.readEntity(InputStream.class));
+                            for(StatisticMsg statistic : statistics.getStatisticList())
+                                System.out.println("- " + statistic.getTimestamp() +  " -> " + statistic.getValue());
+                        }
+                    }
+                    else if(input.equals("2")){
+                        System.out.println("Insert house id");
+                        String houseId = reader.readLine();
+                        System.out.println("Insert number of statistics");
+                        String number = reader.readLine();
+                        response = target.path("administrator/averagedeviation/" + houseId + "/" + number).request().get();
+                        if(response.getStatus() != 200)
+                            System.out.println("Request failed, response status: " + response.getStatus());
+                        else{
+                            StatisticsAverageAndDeviationMsg averageAndDeviation = StatisticsAverageAndDeviationMsg
+                                    .parseFrom(response.readEntity(InputStream.class));
+                            System.out.println("Average:  " + averageAndDeviation.getAverage() +  "\n" +
+                                    "Standard deviation: " + averageAndDeviation.getDeviation());
+                        }
+                    }
+                    else if(input.equals("3")){
+                        System.out.println("Insert number of statistics");
+                        String number = reader.readLine();
+                        response = target.path("administrator/globalstatistics/" + number).request().get();
+                        if(response.getStatus() != 200)
+                            System.out.println("Request failed, response status: " + response.getStatus());
+                        else{
+                            StatisticListMsg statistics = StatisticListMsg.parseFrom(
+                                    response.readEntity(InputStream.class)
+                            );
+                            for(StatisticMsg statistic : statistics.getStatisticList()){
+                                System.out.println("- " + statistic.getTimestamp() +  " -> " +
+                                        statistic.getValue());
+                            }
+
+                        }
+                    }
+                    else if(input.equals("4")){
+                        System.out.println("Insert number of statistics");
+                        String number = reader.readLine();
+                        response = target.path("administrator/averagedeviationglobal/" + number).request().get();
+                        if(response.getStatus() != 200)
+                            System.out.println("Request failed, response status: " + response.getStatus());
+                        else {
+                            StatisticsAverageAndDeviationMsg statistic = StatisticsAverageAndDeviationMsg.parseFrom(
+                                    response.readEntity(InputStream.class)
+                            );
+                            System.out.println("Average:  " + statistic.getAverage() +  "\n" +
+                                    "Standard deviation: " + statistic.getDeviation());
+                        }
+                    }
+
                 }
 
                 //Disconnect to the server
@@ -84,7 +151,6 @@ public class AdministratorMain {
                                 MediaType.APPLICATION_OCTET_STREAM));
 
             }catch (ProcessingException ex){
-                System.out.println(ex.getCause().getClass());
                 Throwable cause = ex.getCause();
                 switch (cause.getClass().getName()){
                     //if the connection doesn't exist maybe the server isn't running

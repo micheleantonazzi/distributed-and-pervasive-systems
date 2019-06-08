@@ -1,6 +1,6 @@
 package administrator.rest;
 
-import aspects.annotations.ProtoInput;
+import server.aspects.annotations.ProtoInput;
 import messages.NotificationMsgOuterClass.NotificationMsg;
 
 import javax.ws.rs.Consumes;
@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @Path("")
-public class Services {
+public class RestServices {
 
     @POST
     @Path("notification")

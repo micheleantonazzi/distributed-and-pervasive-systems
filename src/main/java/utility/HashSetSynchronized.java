@@ -1,6 +1,7 @@
 package utility;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class HashSetSynchronized<T> {
@@ -8,6 +9,14 @@ public class HashSetSynchronized<T> {
 
     public HashSetSynchronized(){
         this.hashSet = new HashSet<>();
+    }
+
+    public HashSetSynchronized(List<T> list){
+        this();
+        synchronized (this){
+            for (T element : list)
+                this.hashSet.add(element);
+        }
     }
 
     public synchronized boolean add(T element){
@@ -18,7 +27,7 @@ public class HashSetSynchronized<T> {
         return this.hashSet.remove(element);
     }
 
-    public synchronized Set<T> getList(){
+    public synchronized Set<T> getSet(){
         return (Set<T>) this.hashSet.clone();
     }
 

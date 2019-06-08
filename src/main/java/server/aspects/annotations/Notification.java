@@ -1,4 +1,4 @@
-package aspects.annotations;
+package server.aspects.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
