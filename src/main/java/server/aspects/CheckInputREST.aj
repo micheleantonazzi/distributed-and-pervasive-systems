@@ -23,7 +23,7 @@ public aspect CheckInputREST {
             //Get the builder of the class passed
             Builder builder = (Builder) protoInput.proto().getDeclaredMethod("newBuilder").invoke(new Object[0]);
 
-            //Parser of th class contained in protoInput
+            //Parser of the class contained in protoInput
             Parser parser = ((Parser) protoInput.proto().getDeclaredMethod("parser").invoke(new Object[0]));
             Object message = parser.parseFrom(inputStream);
 

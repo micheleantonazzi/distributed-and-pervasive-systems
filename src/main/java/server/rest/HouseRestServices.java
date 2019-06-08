@@ -25,6 +25,7 @@ public class HouseRestServices {
     @ProtoInput(proto = HouseInfoMsg.class)
     @Notification(text = "New house enter in the network.")
     public Response enter(InputStream inputStream) {
+
         HouseInfoMsg msg = null;
         try {
             msg = HouseInfoMsg.parseFrom(inputStream);
@@ -45,7 +46,6 @@ public class HouseRestServices {
         //Remove current house
         houses.remove(msg);
         return Response.ok(HouseInfoListMsg.newBuilder().addAllHouse(houses).build().toByteArray()).build();
-
     }
 
     @POST
