@@ -50,7 +50,7 @@ public class HouseGrpcServices extends HouseServicesImplBase {
 
             @Override
             public void onError(Throwable throwable) {
-                System.out.println(throwable);
+                //System.out.println(throwable);
             }
 
             @Override
