@@ -17,7 +17,7 @@ public class ThreadGlobalStatistic extends Thread {
 
     @Override
     public void run(){
-        while(true){
+        while(true) {
             List<StatisticMsg> statistics = HousesAndStatistics.getInstance().getAllStatistics();
             StatisticMsg globalStatistic = StatisticMsg.newBuilder()
                     .setValue(statistics.stream().mapToDouble(statistic -> statistic.getValue()).sum())
@@ -27,12 +27,12 @@ public class ThreadGlobalStatistic extends Thread {
             System.out.println("Global Statistic of " + statistics.size() + " houses:\n" +
                     globalStatistic.getTimestamp() + " -> " + globalStatistic.getValue());
 
-            if(Coordinator.getInstance().isCoordinator()){
+            if (Coordinator.getInstance().isCoordinator()) {
                 System.out.println("I'm the coordinator and send global statistic\n");
                 new Thread(new RunnableSendGlobalStatistic(globalStatistic, target)).start();
-            }
-            else
+            } else
                 System.out.println();
+
         }
     }
 

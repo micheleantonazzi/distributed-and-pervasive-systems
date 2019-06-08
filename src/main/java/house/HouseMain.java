@@ -69,7 +69,7 @@ public class HouseMain {
                             Entity.entity(HOUSE_INFO.toByteArray(),
                                     MediaType.APPLICATION_OCTET_STREAM));
                     if(response.getStatus() != 200){
-                        server.shutdown();
+                        server.shutdownNow();
                         retry = false;
                         ID++;
                     }
@@ -91,6 +91,7 @@ public class HouseMain {
             HousesAndStatistics.getInstance().addHouse(HOUSE_INFO);
 
             //Say hello to other houses
+            System.out.println(HousesAndStatistics.getInstance().getOtherHouses());
             for (HouseInfoMsg house : HousesAndStatistics.getInstance().getOtherHouses())
                 new ThreadSayHello(HOUSE_INFO, house).start();
 

@@ -87,7 +87,6 @@ public class BoostCoordinator {
     }
 
     public synchronized void request(HouseInfoMsg house, StreamObserver<Response> streamObserver){
-
         if(this.status == Status.FREE){
             streamObserver.onNext(Response.newBuilder().setStatus(Response.Status.OK).build());
             streamObserver.onCompleted();
