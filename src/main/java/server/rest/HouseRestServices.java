@@ -3,6 +3,7 @@ package server.rest;
 import messages.StatisticMsgs.StatisticMsg;
 import messages.StatisticMsgs.StatisticHouseMsg;
 import server.GlobalStatistics;
+import server.aspects.CheckInputREST;
 import server.aspects.annotations.ProtoInput;
 import server.aspects.annotations.Notification;
 import messages.HouseMsgs.HouseInfoListMsg;
@@ -92,7 +93,6 @@ public class HouseRestServices {
 
     @DELETE
     @Path("leave/{id}")
-    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
     @Notification(text = "A house leaves the network.")
     public Response leave(@PathParam("id") int id){
         if(!Houses.getInstance().remove(id))
@@ -103,12 +103,20 @@ public class HouseRestServices {
 
     @DELETE
     @Path("unexpectedexit/{id}")
-    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
     @Notification(text = "A house leaves unexpectedly the network.")
     public Response unexpectedlyExit(@PathParam("id") int id){
         if(!Houses.getInstance().remove(id))
             //422 = Unprocessable Entity
             return Response.status(422).build();
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("boostrequest")
+    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
+    @ProtoInput(proto = HouseInfoMsg.class)
+    @Notification(text = "A house requests the boost")
+    public Response boostRequest(InputStream inputStream){
         return Response.ok().build();
     }
 }

@@ -3,6 +3,7 @@ package house;
 import house.services.HouseServicesGrpc;
 import house.services.HouseServicesGrpc.HouseServicesStub;
 import house.services.HouseServicesOuterClass.Response;
+import house.threads.RunnableBoostRequest;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
@@ -41,6 +42,8 @@ public class BoostCoordinator {
         if(this.status != Status.FREE)
             return false;
 
+        new Thread(new RunnableBoostRequest()).start();
+
         this.houses = new HashMap<>();
         this.notifyHouses = new HashMap<>();
 
@@ -70,6 +73,7 @@ public class BoostCoordinator {
             this.houses.put(house, streamObserver);
 
             stub.acquireBoost(HouseMain.getHouseInfo(), streamObserver);
+
         }
 
         this.status = Status.WAIT;
